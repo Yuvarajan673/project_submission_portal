@@ -15,8 +15,8 @@ from django.contrib.auth import authenticate,login,logout
 
 #CUSTOM FUNCTIONS
 def check_redirection(request):
-    if request.user.role == 'admin' and request.path != '/dashboard/admin':
-        return redirect('/dashboard/admin')
+    if request.user.role == 'admin' and request.path != '/dashboard/admin/':
+        return redirect('/dashboard/admin/')
     elif request.user.role == 'coach' and request.path != '/dashboard/coach/':
         return redirect('/dashboard/coach/')
     elif request.user.role == 'student' and request.path != '/dashboard/student/':
