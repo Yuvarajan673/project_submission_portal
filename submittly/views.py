@@ -83,7 +83,15 @@ def login_user(request):
         user = authenticate(request,username=username,password=pwd)
         if user is not None:
             login(request,user)
-            return check_redirection(request)
+            if user.role=='admin':
+                messages.success(request,"Logged in as Admin Successfully")
+                return redirect('/dashboard/admin/')
+            if user.role == 'coach':
+                messages.success(request,"Logged in as Coach Successfully")
+                return redirect('/dashboard/coach/')
+            if user.role == 'student':
+                messages.success(request,"Logged in as Student Successfully")
+                return redirect('/dashboard/student/')
             
         messages.error(request, "* Please enter the correct ussername or password")
         return render(request,'login.html',context)
