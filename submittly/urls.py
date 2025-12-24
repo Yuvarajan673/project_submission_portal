@@ -48,7 +48,7 @@ urlpatterns=[
 
 
     # Admin Dashboard Routes
-    path('dashboard/admin',views.admin_dashboard,name='admin_dashboard'),
+    path('dashboard/admin/',views.admin_dashboard,name='admin_dashboard'),
     path('table_filter/<str:mod_name>/',views.table_filter,name='table_filter'),
     path('add_user/<str:mod_name>/',views.add_user,name='add_user'),
     path('adminform/<int:id>/<str:mod_name>/',views.adminform,name='adminform'),
