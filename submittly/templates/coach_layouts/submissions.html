@@ -4,21 +4,51 @@
 
 <section class="project-submission-section dashboard sec">
   <div class="page-heading sec">
-        <h2>Submissions</h2>
+        <h2>Submissions  · {{project.title}}</h2>
         <h4>Coach Dashboard</h4>
+  </div>
+  
+  <div class="quick-info sec">
+    <div class="first-row">
+      <div class="info-box total-students">
+        <div>
+          <h2>{{total_students}}</h2>
+          <p>Total Students</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" style="color: var(--purple);" width="40" height="40" viewBox="0 0 48 48"><!-- Icon from IconPark Solid by ByteDance - https://github.com/bytedance/IconPark/blob/master/LICENSE --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="4"><path fill="currentColor" d="M24 20a7 7 0 1 0 0-14a7 7 0 0 0 0 14"/><path d="M12 7.255A6.99 6.99 0 0 0 9 13a7 7 0 0 0 3.392 6M36 7.255A6.99 6.99 0 0 1 39 13a6.99 6.99 0 0 1-3 5.746"/><path fill="currentColor" d="M12 40v2h24v-2c0-3.727 0-5.591-.609-7.062a8 8 0 0 0-4.33-4.329C29.592 28 27.728 28 24 28s-5.591 0-7.061.609a8 8 0 0 0-4.33 4.33C12 34.409 12 36.273 12 40"/><path d="M44 42v-1.2c0-4.48 0-6.72-.872-8.432a8 8 0 0 0-3.496-3.496M4 42v-1.2c0-4.48 0-6.72.872-8.432a8 8 0 0 1 3.496-3.496"/></g></svg>
+      </div>
+      <div class="info-box submitted-students">
+        <div>
+          <h2>{{submitted_students}}</h2>
+          <p>Submitted Students</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" style="color: var(--ico-green);" width="40" height="40" viewBox="0 0 24 24"><!-- Icon from Lucide by Lucide Contributors - https://github.com/lucide-icons/lucide/blob/main/LICENSE --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11l3 3L22 4"/></g></svg>  
+      </div>
+      <div class="info-box pending-students">
+        <div>
+          <h2>{{pending_students}}</h2>
+          <p>Pending Students</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" style="color: var(--ico-orange);" width="40" height="40" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M13 12.175V9q0-.425-.288-.712T12 8t-.712.288T11 9v3.575q0 .2.075.388t.225.337l2.525 2.525q.3.3.713.3t.712-.3q.275-.3.275-.712t-.275-.688zM12 6q.425 0 .713-.288T13 5t-.288-.712T12 4t-.712.288T11 5t.288.713T12 6m6 6q0 .425.288.713T19 13t.713-.288T20 12t-.288-.712T19 11t-.712.288T18 12m-6 6q-.425 0-.712.288T11 19t.288.713T12 20t.713-.288T13 19t-.288-.712T12 18m-6-6q0-.425-.288-.712T5 11t-.712.288T4 12t.288.713T5 13t.713-.288T6 12m6 10q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
+      </div>
+      <div class="info-box not-reviewed">
+        <div>
+          <h2>{{not_reviewed}}</h2>
+          <p>Not Reviewed</p>
+        </div>
+        <svg xmlns="http://www.w3.org/2000/svg" style="color: var(--red);" width="40" height="40" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M9.5 14H11v-3h4.5L14 9l1.5-2h-6zM5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3z"/></svg>
+      </div>
     </div>
-    <!-- History Timeline -->
-
+  </div>
     
 <!-- Submissions Table -->
  {% if submissions %}
 <div class="table-layout sec">
-  <h3>Project Title : {{project.title}}</h2>
   <table>
     <thead>
       <tr>
         <th>S.No</th>
-        <th>Student Name</th>
+        <th>Student</th>
         <th>Submitted On</th>
         <th>Status</th>
       </tr>

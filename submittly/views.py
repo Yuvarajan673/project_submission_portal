@@ -262,7 +262,15 @@ def submit_answer(request,project_id):
 def view_submissions(request,project_id):
     project=Project.objects.get(id=project_id)
     submissions=Submission.objects.filter(submitted_to_id=project_id)
-    return render(request,'coach_layouts/submissions.html',{'submissions':submissions,'project':project})
+    tot_students=User.objects.filter(role='student',section=request.user.section).count()
+    not_reviewed=Submission.objects.filter(submitted_to=project_id,status='pending review').count()
+    return render(request,'coach_layouts/submissions.html',{
+        'submissions':submissions,
+        'project':project,
+        'total_students':tot_students,
+        'submitted_students':submissions.count(),
+        'pending_students':tot_students-submissions.count(),
+        'not_reviewed':not_reviewed})
     
 
 
@@ -283,14 +291,14 @@ def coach_dashboard(request):
     sections={}
     for sec in User._meta.get_field("section").choices:
         sections[sec[0]]={
-            "tot_stu":User.objects.filter(section=sec[0]).count(),
+            "tot_stu":User.objects.filter(role='student',section=sec[0]).count(),
             "pres":Attendance.objects.filter(student__section=sec[0],status='present',date=date.today()).count(),
             "abs":Attendance.objects.filter(student__section=sec[0],status='absent',date=date.today()).count(),
             "late":Attendance.objects.filter(student__section=sec[0],status='late',date=date.today()).count()
             }
     projects=Project.objects.filter(created_by=request.user)
     sub_count={}
-    tot_student=User.objects.filter(role='student').count()
+    tot_student=User.objects.filter(role='student',section=request.user.section).count()
     for pro in projects:
         sub_count[pro.id]=Submission.objects.filter(submitted_to=pro).count()
     return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'sections':sections})

@@ -50,7 +50,7 @@ function updateStatuses() {
             const minutes = date.getUTCMinutes()
             const seconds = date.getUTCSeconds()
             timeEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            timeEl.setAttribute('style','color:#4400ff');
+            timeEl.setAttribute('style','color: var(--purple);');
         }
     });
 }

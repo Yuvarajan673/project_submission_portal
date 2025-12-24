@@ -8,7 +8,7 @@
     </div>
     <div class="submission-side-group">
         <div class="submission-preview-side">
-            <div class="about-submission">
+            <div class="about-submission information-div">
                 <div class="left-side">
                     <div>
                         <p>Student</p>
@@ -30,15 +30,18 @@
                 </div>
             </div>
             </div>
-            <div class="submission-link link-div">
+            <div class="submission-link information-div">
                 <h3>Submission Link</h3>
-                <a href="{{submission.ans_doc_link}}" class="link" target="_blank">{{submission.ans_doc_link}}</a>
+                <a href="{{submission.ans_doc_link}}" class="link icon-group" target="_blank">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M9 13h6q.425 0 .713-.288T16 12t-.288-.712T15 11H9q-.425 0-.712.288T8 12t.288.713T9 13m0 3h6q.425 0 .713-.288T16 15t-.288-.712T15 14H9q-.425 0-.712.288T8 15t.288.713T9 16m0 3h3q.425 0 .713-.288T13 18t-.288-.712T12 17H9q-.425 0-.712.288T8 18t.288.713T9 19m-3 3q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h7.175q.4 0 .763.15t.637.425l4.85 4.85q.275.275.425.638t.15.762V20q0 .825-.587 1.413T18 22zm7-14q0 .425.288.713T14 9h4l-5-5z"/></svg>
+                    View document
+                </a>
             </div>
             <h3>Feedbacks</h3>
             <div class="feedback-msg-div">
                 {% if feedbacks %}
                     {% for feedback in feedbacks %}
-                    <div class="feedback-msg">
+                    <div class="feedback-msg information-div">
                         <p>{{feedback.feedback|capfirst}}</p>
                         <p>{{feedback.posted_date}}</p>
                     </div>
@@ -49,7 +52,7 @@
             </div>
         </div>
         <div class="submission-feedback-side">
-            <div class="grading-div">
+            <div class="grading-div information-div">
                 <h3>Grading</h3>
                 <form class="grading-form" action="{% url 'save_grade' submission.id %}" method="post">
                     {% csrf_token %}
@@ -68,7 +71,7 @@
                     <button type="submit" class="form-btn"><span>Save Grade</span></button>
                 </form>
             </div>
-            <div class="feedback-div">
+            <div class="feedback-div information-div">
                 <h3>Add Feedback</h3>
                 <form class="feedback-form" action="{% url 'save_feedback' submission.id %}" method="post">
                     {% csrf_token %}

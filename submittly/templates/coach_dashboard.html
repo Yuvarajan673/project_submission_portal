@@ -15,8 +15,8 @@
     <h2>Sections</h2>
     <div class="first-row">
       {% for sec in sections %}
-      <a href="{% url 'get_sec_students' sec %}" class="stats-group">
-        <div class="stats">
+      <a href="{% url 'get_sec_students' sec %}" class="stats">
+        <div class="stats-body">
           <div>
             <p>📚 Sec {{sec}}</p>
             <h2>{{sections|get_items:sec|get_items:'tot_stu'}}</h2>

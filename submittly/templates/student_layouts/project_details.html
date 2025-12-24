@@ -10,7 +10,7 @@
     </div>
     <div class="main-content sec">
         <div class="details-div">
-            <div class="project-info-div link-div">
+            <div class="project-info-div information-div">
                 <div class="project-info-head">
                     <h3>Project Information</h3>
                     <h3>Project Title : {{project.title}}</h3>
@@ -38,20 +38,23 @@
                     </div>
                 </div>
             </div>
-            <div class="project-description-div link-div">
+            <div class="reference-doc-div information-div">
+                <h3>Reference Document</h3>
+                <a href="{{project.document_link}}" target="_blank" class="link icon-group">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M9 13h6q.425 0 .713-.288T16 12t-.288-.712T15 11H9q-.425 0-.712.288T8 12t.288.713T9 13m0 3h6q.425 0 .713-.288T16 15t-.288-.712T15 14H9q-.425 0-.712.288T8 15t.288.713T9 16m0 3h3q.425 0 .713-.288T13 18t-.288-.712T12 17H9q-.425 0-.712.288T8 18t.288.713T9 19m-3 3q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h7.175q.4 0 .763.15t.637.425l4.85 4.85q.275.275.425.638t.15.762V20q0 .825-.587 1.413T18 22zm7-14q0 .425.288.713T14 9h4l-5-5z"/></svg>
+                    View reference document
+                </a>
+            </div>
+            <div class="project-description-div information-div">
                 <h3>Guidelines & Requirements :</h3>
                 <pre class="description-content">{{project.description}}</pre>
-            </div>
-            <div class="reference-doc-div link-div">
-                <h3>Reference Document</h3>
-                <h4>Document Link : <a href="{{project.document_link}}" target="_blank" class="link">{{project.document_link}}</a></h4>
             </div>
             {% if answer_submitted %}
             <h3>Feedbacks</h3>
             <div class="feedback-msg-div">
                 {% if feedbacks %}
                     {% for feedback in feedbacks %}
-                    <div class="feedback-msg">
+                    <div class="feedback-msg information-div">
                         <p>{{feedback.submission_id.submitted_to.created_by.first_name}}</p>
                         <p>{{feedback.feedback|capfirst}}</p>
                         <p>{{feedback.posted_date}}</p>
@@ -63,7 +66,7 @@
             </div>
             {% endif %}
         </div>
-        <div class="submit-answer-div">
+        <div class="submit-answer-div information-div">
             {% if not answer_submitted %}
             <form class="submit-answer-form" method="post" action="{% url 'submit_answer' project.id %}">
             {% csrf_token %}

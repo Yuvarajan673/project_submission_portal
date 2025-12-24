@@ -2,7 +2,7 @@
 {% block title %} New Project | Submittly {% endblock title %}
 
 {% block content %}
-<section class="project-creation dashboard sec">
+<section class="project-creation sec">
     <form class="create-project submission-form sec" action="{% url 'create_project' %}" method="post">
         {% csrf_token %}
         <div class="title-div sec">

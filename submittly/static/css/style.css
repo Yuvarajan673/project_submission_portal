@@ -10,7 +10,7 @@
 }
 *::selection{
     color: var(--white);
-    background-color: var(--black);
+    background-color: var(--purple);
 }
 img[src="{% static 'images/logo.png' %}"]::selection{
     user-select: none;
@@ -95,7 +95,9 @@ p{
     bottom: 30px;
     min-width: 300px;
     max-width: 400px;
-    border: 1px solid var(--black);
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0 10px #00000096;
 }
 .appear-msg{
     right: 30px;
@@ -129,7 +131,6 @@ p{
     align-items: center;
     padding:0 10px;
     background-color: var(--white);
-    border-bottom: 1px solid var(--black);
 }
 .time-div{
     display: flex;
@@ -178,11 +179,11 @@ p{
     width: 100%;
     padding: 10px;
     border: none;
-    background-color: var(--black);
+    background-color: var(--purple);
     color: var(--white);
     font-size: medium;
     cursor: pointer;
-    position: relative;
+    border-radius: 10px;
 }
 .form-btn i{
     font-size: smaller;
@@ -190,24 +191,6 @@ p{
 }
 .form-btn:hover i{
     transform: translateX(5px);
-}
-.form-btn::before{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 0;
-    z-index: 0;
-    background-color: var(--purple); 
-    transition: height .5s var(--transis);  
-}
-.form-btn > span{
-    position: relative;
-    z-index: 2;
-}
-.form-btn:hover::before{
-    height: 100%;
 }
 
 /* navbar button styling */
@@ -249,37 +232,14 @@ p{
 .other-btn{
     text-decoration: none;
     text-wrap: nowrap;
-    position: relative;
     padding: 15px 25px;
     border: none;
+    border-radius: 10px;
     width: 100%;
+    font-size: medium;
     color: var(--white);
     cursor: pointer;
-    background-color: var(--black);
-    transition: color .6s var(--transis);
-    overflow: hidden;
-}
-.other-btn > span{
-    position: relative;
-    z-index: 2;
-}
-.other-btn::before{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 0;
-    z-index:1;
     background-color: var(--purple);
-    transition: height .6s var(--transis);
-}
-.other-btn:hover::before{
-    height: 100%;
-    color: var(--white);
-}
-.other-btn:hover{
-    color: var(--white);
 }
 
 
@@ -722,27 +682,32 @@ header{
 }
 table{
     width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 4px #00000033;
 }
 table,th,td{
     border-collapse: collapse;
     cursor: pointer;
-    padding: 10px;
+    padding: 15px;
 }
 th{
-    background-color: var(--black);
-    color: white;
+    background-color: #dee2e7;
+    color: #64748B ;
+    font-weight: bolder;
 }
 tr{
     text-wrap: nowrap;
     text-align: center;
+    background-color: #fff;
+    border-bottom: 1px solid #dadde4;
     transition: background-color .2s,color .2s;
 }
-tr:nth-child(even){
-    background-color: #dedede;
+tr:last-child{
+    border-bottom: none;
 }
 tr:has(td:hover){
-    background-color: var(--purple);
-    color: white;
+    background-color: #bec4cd39 ;
 }
 .action-bar{
     display: flex;
@@ -782,6 +747,7 @@ tr:has(td:hover){
 }
 .dashboard{
     padding: 30px;
+    background-color: #F8FAFC;
 }
 .projects-div{
     display: grid;
@@ -794,6 +760,7 @@ tr:has(td:hover){
     position: absolute;
     padding: 2px 8px;
     border-bottom-right-radius: 5px;
+    border-top-left-radius: 5px;
     font-weight: bold;
     letter-spacing: 0.5px;
     left: 0;
@@ -811,27 +778,20 @@ tr:has(td:hover){
     padding: 20px;
     display: flex;
     flex-direction: column;
-    background-color: rgb(227, 227, 227);
+    background-color: var(--white);
     justify-content: space-between;
     gap: 10px;
     position: relative;
-    transition: color .6s var(--transis);
+    border-radius: 10px;
+    box-shadow: 0 0 4px #00000033;
+    overflow: hidden;
+    transition: transform .2s;
 }
-.card::before{
-    content: "";
-    position: absolute;
-    width: 100%;
-    left: 0;
-    bottom: 0;
-    height: 0;
-    background-color: var(--black);
-    transition: height .6s var(--transis);
-    z-index: 0;
+.card:hover{
+    transform: translateY(-8px);
 }
-.card-content{
-    position: relative;
-    z-index: 1;
-}
+
+
 
 
 .action-btn-group{
@@ -851,39 +811,13 @@ tr:has(td:hover){
     position: relative;
     padding: 15px 18px;
     border: none;
+    border-radius: 10px;
     width: 100%;
     color: var(--white);
     cursor: pointer;
-    background-color: var(--black);
-    overflow: hidden;
-}
-.specific-btn > span{
-    position: relative;
-    z-index: 2;
-}
-.specific-btn::before{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 0;
-    z-index:1;
     background-color: var(--purple);
-    transition: height .6s var(--transis);
 }
 
-.card:hover .specific-btn::before{
-    height: 100%;
-}
-
-
-.card:hover::before{
-    height: 100%;
-}
-.card:hover{
-    color: var(--white);
-}
 .icon-group{
     display: flex;
     align-items: center;
@@ -951,20 +885,48 @@ input.late:checked + .for-late{
 }
 .info-box{
     display: flex;
+    cursor: pointer;
     justify-content: space-between;
     align-items: center;
-    border: 1px solid var(--black);
     padding: 20px;
+    border-radius: 10px;
+    background-color: var(--white);
     flex-grow: 1;
-    min-width: 200px;
+    width: 200px;
+
+    transition: transform .2s;
 }
-.stats-group{
-    border: 1px solid var(--black);
-    padding: 20px;
-    flex-grow: 1;
-    min-width: 200px;
+.info-box:hover{
+    transform: translateY(-8px);
+}
+.info-box.total-project,
+.info-box.total-students{
+    box-shadow: 0 0 3px #0000005e,5px 5px var(--purple);
+}
+.info-box.submitted-project,
+.info-box.submitted-students{
+    box-shadow: 0 0 3px #0000005e,5px 5px var(--ico-green);
+}
+.info-box.pending-project,
+.info-box.pending-students{
+    box-shadow: 0 0 3px #0000005e,5px 5px var(--ico-orange);
+}
+.info-box.missed-project,
+.info-box.not-reviewed{
+    box-shadow: 0 0 3px #0000005e,5px 5px var(--red);
 }
 .stats{
+    padding: 20px;
+    flex-grow: 1;
+    min-width: 200px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px #00000033;
+    transition: transform .2s;
+}
+.stats:hover{
+    transform: translateY(-8px);
+}
+.stats-body{
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -977,7 +939,7 @@ input.late:checked + .for-late{
     padding: 10px;
     text-align: center;
     flex-grow: 1;
-    border-radius: 3px;
+    border-radius: 10px;
 }
 .present{
     background-color: #00ff1522;
@@ -990,15 +952,15 @@ input.late:checked + .for-late{
 }
 .main-content{
     display: flex;
-    gap: 20px;
+    gap: 25px;
     flex-wrap: wrap;
 }
 .details-div{
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
     flex-grow: 1;
-    max-width: 1000px;
+    max-width: 980px;
 }
 .project-info-div{
     display: flex;
@@ -1019,13 +981,12 @@ input.late:checked + .for-late{
 
 .submit-answer-div{
     padding: 30px 20px;
-    flex-basis: 200px;
+    flex-basis: 0;
     flex-grow: 1;
     width: 100%;
     height: 300px;
-    border: 1px solid var(--black);
     position: sticky;
-    top: 100px;
+    top: 105px;
 }
 .submit-answer-div form{
     display: flex;
@@ -1062,13 +1023,13 @@ input.late:checked + .for-late{
 .submission-side-group{
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 25px;
 }
 /* preview side */
 .submission-preview-side{
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 25px;
     flex-grow: 1;
 
     flex-basis: 700px;
@@ -1076,15 +1037,23 @@ input.late:checked + .for-late{
 .about-submission{
     display: flex;
     padding: 20px;
-    border: 1px solid var(--black);
 }
-.link-div{
+.information-div{
     padding: 20px;
-    border: 1px solid var(--black);
+    border-radius: 10px;
+    box-shadow: 0 0 4px #00000033;
+    background-color: var(--white);
+}
+.reference-doc-div,
+.submission-link{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 .link{
     word-break: break-all;
     text-decoration: underline;
+    color: var(--purple);
 }
 .left-side,
 .right-side{
@@ -1112,7 +1081,6 @@ input.late:checked + .for-late{
 .feedback-msg{
     display: flex;
     justify-content: space-between;
-    border: 1px solid black;
     padding: 20px;
 }
 .feedback-msg-div{
@@ -1129,14 +1097,6 @@ input.late:checked + .for-late{
     flex-direction: column;
     flex-grow: 1;
     gap: 20px;
-}
-.grading-div{
-    border: 1px solid var(--black);
-    padding: 20px;
-}
-.feedback-div{
-    border: 1px solid var(--black);
-    padding: 20px;
 }
 
 
