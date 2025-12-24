@@ -1,0 +1,22 @@
+{% load static %}
+{% if messages %}
+{% for msg in messages %}
+    <div class="message-div appear-msg">
+      <div class="message-head">
+           <img src="{% static 'images/logo.png' %}" width="80px">
+          <div class="time-div">
+              <p>Just now</p>
+              <span onclick="closemsg('.message-div')">&times;</span>
+          </div>
+      </div>
+      <div class="message-body" {% if msg.tags == 'success' %} style="background-color: var(--ico-green);" {% else %} style="background-color: var(--red);" {% endif %}>
+          {{msg}}
+          {% if msg.tags == 'success' %} 
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
+          {% else %} 
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><!-- Icon from Gridicons by Automattic - https://github.com/Automattic/gridicons/blob/trunk/LICENSE.md --><path fill="currentColor" d="M19.1 4.9C15.2 1 8.8 1 4.9 4.9S1 15.2 4.9 19.1s10.2 3.9 14.1 0s4-10.3.1-14.2m-4.3 11.3L12 13.4l-2.8 2.8l-1.4-1.4l2.8-2.8l-2.8-2.8l1.4-1.4l2.8 2.8l2.8-2.8l1.4 1.4l-2.8 2.8l2.8 2.8z"/></svg>
+          {% endif %}
+      </div>
+  </div>
+{% endfor %}
+{% endif %}

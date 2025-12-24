@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Project Submissions | Submittly{% endblock title %}
+{% block content %}
+
+<section class="project-submission-section dashboard sec">
+  <div class="page-heading sec">
+        <h2>Submissions</h2>
+        <h4>Coach Dashboard</h4>
+    </div>
+    <!-- History Timeline -->
+
+    
+<!-- Submissions Table -->
+ {% if submissions %}
+<div class="table-layout sec">
+  <h3>Project Title : {{project.title}}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Student Name</th>
+        <th>Submitted On</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for submission in submissions %}
+          {% url 'submission_details' submission.id as subdetails %}
+          <tr onclick="window.location.href='{{subdetails}}'">
+            <td>{{forloop.counter}}</td>
+            <td>{{submission.submitted_by|capfirst}}</td>
+            <td>{{submission.submitted_at}}</td>
+            <td {% if submission.status == 'pending review' %} style="color: #ff6a00;" {% else %} style="color: #009d00;" {% endif %}>{{submission.status|capfirst}}</td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="table-layout sec">
+  <h3>User Submissions</h3>
+  <h3>Project Title : {{project.title}}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>S.No</th>
+        <th>Student Name</th>
+        <th>Submitted On</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+<h3 class="sec" style="text-align: center; height: 300px;line-height: 300px;">No Submissions</h4>
+{% endif %}
+</section>
+{% endblock content %}

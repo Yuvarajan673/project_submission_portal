@@ -1,0 +1,83 @@
+{% load static %}
+<div class="form-container">
+    <form class="change-user-form" id="change-form" method="post" action="{% url 'add_user' mod_name %}">
+        {% csrf_token %}
+        <div class="field-group">
+        <div class="field firstname-div">
+            <svg id="fn-ico" style="border: 1.5px solid; border-right: none;"xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 4H7v16m0-8h8"/></svg>
+            <input type="text" name="first_name" id="firstname" maxlength="100" minlength="2" placeholder=" " autocomplete="on" required>
+            <label for="">Firstname</label>
+        </div>
+        <div class="field lastname-div">
+            <svg id="ln-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16h10"/></svg>
+            <input type="text" name="last_name" id="lastname" maxlength="100" minlength="2" placeholder=" " autocomplete="on" required>
+            <label for="">Lastname</label>
+        </div>
+        <div class="field username-div">
+            <svg id="un-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 8v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z"/></svg>
+            <input type="text" name="username" id="username" maxlength="100" minlength="2" placeholder=" " autocomplete="on" required>
+            <label for="">Username</label>
+        </div>
+        <div class="field password-div">
+            <svg id="p-ico3" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="-1 -1 26 26"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" fill-rule="evenodd" d="M5.25 10.055V8a6.75 6.75 0 0 1 13.5 0v2.055c1.115.083 1.84.293 2.371.824C22 11.757 22 13.172 22 16s0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16s0-4.243.879-5.121c.53-.531 1.256-.741 2.371-.824M6.75 8a5.25 5.25 0 0 1 10.5 0v2.004Q16.676 9.999 16 10H8q-.677-.001-1.25.004zM8 17a1 1 0 1 0 0-2a1 1 0 0 0 0 2m4 0a1 1 0 1 0 0-2a1 1 0 0 0 0 2m5-1a1 1 0 1 1-2 0a1 1 0 0 1 2 0" clip-rule="evenodd"/></svg>
+            <input type="password" name="password" id="password" placeholder=" " pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+            <label for="">Password</label>
+        </div>
+        <div class="field email-div">
+            <svg id="e-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="-1 -1 26 26"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12v1.45q0 1.475-1.012 2.513T18.5 17q-.875 0-1.65-.375t-1.3-1.075q-.725.725-1.638 1.088T12 17q-2.075 0-3.537-1.463T7 12t1.463-3.537T12 7t3.538 1.463T17 12v1.45q0 .65.425 1.1T18.5 15t1.075-.45t.425-1.1V12q0-3.35-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20h4q.425 0 .713.288T17 21t-.288.713T16 22zm0-7q1.25 0 2.125-.875T15 12t-.875-2.125T12 9t-2.125.875T9 12t.875 2.125T12 15"/></svg>
+            <input type="email" name="email" id="email"  placeholder=" " autocomplete="on" required>
+            <label for="">Email</label>
+        </div>
+        <div class="field role-sel-div">
+            <svg id="sel-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="34" height="28.5" viewBox="0 0 25 25"><!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE --><path fill="currentColor" d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5s1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5m0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5S5.5 6.83 5.5 6S4.83 4.5 4 4.5m0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5s1.5-.68 1.5-1.5s-.67-1.5-1.5-1.5M8 19h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1m0-6h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1M7 6c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1"/></svg>
+            <select name="role" id="user-role" required>
+                <option selected disabled hidden value="">Select Role</option>
+                <option value="coach">Coach</option>
+                <option value="student">Student</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+        <div class="field date-joined-div">
+            <svg id="e-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="35" height="30" viewBox="-2.5 -2.5 29 29"><!-- Icon from Unicons Solid by Iconscout - https://github.com/Iconscout/unicons/blob/master/LICENSE --><path fill="currentColor" d="M2 19c0 1.7 1.3 3 3 3h14c1.7 0 3-1.3 3-3v-8H2zM19 4h-2V3c0-.6-.4-1-1-1s-1 .4-1 1v1H9V3c0-.6-.4-1-1-1s-1 .4-1 1v1H5C3.3 4 2 5.3 2 7v2h20V7c0-1.7-1.3-3-3-3"/></svg>
+            <input type="datetime-local" name="date_joined" id="date-joined" required>
+            <label for="">Joined Date</label>
+        </div>
+        <div class="field last-login-div">
+            <svg id="e-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="35" height="30" viewBox="-2.5 -2.5 29 29"><!-- Icon from Unicons Solid by Iconscout - https://github.com/Iconscout/unicons/blob/master/LICENSE --><path fill="currentColor" d="M2 19c0 1.7 1.3 3 3 3h14c1.7 0 3-1.3 3-3v-8H2zM19 4h-2V3c0-.6-.4-1-1-1s-1 .4-1 1v1H9V3c0-.6-.4-1-1-1s-1 .4-1 1v1H5C3.3 4 2 5.3 2 7v2h20V7c0-1.7-1.3-3-3-3"/></svg>
+            <input type="datetime-local" name="last_login" id="last-login">
+            <label for="">Last Login</label>
+        </div>
+        <div class="super-user-div">
+            <svg id="fn-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="46" height="40" viewBox="-3 -2.5 29 29"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m16 21l-.3-1.5q-.3-.125-.562-.262T14.6 18.9l-1.45.45l-1-1.7l1.15-1q-.05-.35-.05-.65t.05-.65l-1.15-1l1-1.7l1.45.45q.275-.2.538-.337t.562-.263L16 11h2l.3 1.5q.3.125.563.275t.537.375l1.45-.5l1 1.75l-1.15 1q.05.3.05.625t-.05.625l1.15 1l-1 1.7l-1.45-.45q-.275.2-.537.338t-.563.262L18 21zM2 20v-2.8q0-.825.425-1.55t1.175-1.1q1.275-.65 2.875-1.1T10 13h.35q.15 0 .3.05q-.725 1.8-.6 3.575T11.25 20zm15-2q.825 0 1.413-.587T19 16t-.587-1.412T17 14t-1.412.588T15 16t.588 1.413T17 18m-7-6q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12"/></svg>
+            <input type="hidden" name="is_superuser" value="False">
+            <input type="checkbox" name="is_superuser" id="super-user" value="True">
+            <label for="super-user">Superuser status
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
+            </label>
+        </div>
+        <div class="staff-user-div">
+            <svg id="fn-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="46" height="40" viewBox="-3 -2.5 29 29"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m16 21l-.3-1.5q-.3-.125-.562-.262T14.6 18.9l-1.45.45l-1-1.7l1.15-1q-.05-.35-.05-.65t.05-.65l-1.15-1l1-1.7l1.45.45q.275-.2.538-.337t.562-.263L16 11h2l.3 1.5q.3.125.563.275t.537.375l1.45-.5l1 1.75l-1.15 1q.05.3.05.625t-.05.625l1.15 1l-1 1.7l-1.45-.45q-.275.2-.537.338t-.563.262L18 21zM2 20v-2.8q0-.825.425-1.55t1.175-1.1q1.275-.65 2.875-1.1T10 13h.35q.15 0 .3.05q-.725 1.8-.6 3.575T11.25 20zm15-2q.825 0 1.413-.587T19 16t-.587-1.412T17 14t-1.412.588T15 16t.588 1.413T17 18m-7-6q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12"/></svg>
+            <input type="hidden" name="is_staff" value="False">
+            <input type="checkbox" name="is_staff" id="staff-user" value="True">
+            <label for="staff-user">Staff status
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
+            </label>
+        </div>
+        <div class="active-user-div">
+            <svg id="fn-ico" style="border: 1.5px solid; border-right: none;" xmlns="http://www.w3.org/2000/svg" width="46" height="40" viewBox="-3 -2.5 29 29"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m16 21l-.3-1.5q-.3-.125-.562-.262T14.6 18.9l-1.45.45l-1-1.7l1.15-1q-.05-.35-.05-.65t.05-.65l-1.15-1l1-1.7l1.45.45q.275-.2.538-.337t.562-.263L16 11h2l.3 1.5q.3.125.563.275t.537.375l1.45-.5l1 1.75l-1.15 1q.05.3.05.625t-.05.625l1.15 1l-1 1.7l-1.45-.45q-.275.2-.537.338t-.563.262L18 21zM2 20v-2.8q0-.825.425-1.55t1.175-1.1q1.275-.65 2.875-1.1T10 13h.35q.15 0 .3.05q-.725 1.8-.6 3.575T11.25 20zm15-2q.825 0 1.413-.587T19 16t-.587-1.412T17 14t-1.412.588T15 16t.588 1.413T17 18m-7-6q-1.65 0-2.825-1.175T6 8t1.175-2.825T10 4t2.825 1.175T14 8t-1.175 2.825T10 12"/></svg>
+            <input type="hidden" name="is_active" value="False">
+            <input type="checkbox" name="is_active" id="active-user" value="True" checked>
+            <label for="active-user">Active user status
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
+            </label>
+        </div>
+        </div>
+        <div class="btn-group">
+        <button type="submit" class="save-btn form-btn"><span>Save &nbsp;<i class="fa-solid fa-arrow-right"></i></span></button>
+        <button type="submit" class="save-add-btn other-btn"><span>Save and Add Another &nbsp;<i class="fa-solid fa-arrow-right"></i></span></button>
+        </div>
+    </form>
+    <div class="btn-container">
+
+    </div>
+</div>

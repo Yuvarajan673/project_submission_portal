@@ -1,0 +1,36 @@
+{% extends 'layouts/regbase.html' %}
+{% load static %}
+{% block title %}Login | Submittly{% endblock title %}
+
+
+{% block content %}
+<section class="sec">
+    <form class="login-form auth-form" method="post" action="{% url 'login_user' %}">
+        {% csrf_token %}
+        <a href="/">
+        <img class="sec" src="{% static 'images/logo.png' %}" height="30px">
+        </a>
+        <div class="field-div email-div sec">
+            <svg class="prefix-icon"  xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M12 12q-1.65 0-2.825-1.175T8 8t1.175-2.825T12 4t2.825 1.175T16 8t-1.175 2.825T12 12m-8 8v-2.8q0-.85.438-1.562T5.6 14.55q1.55-.775 3.15-1.162T12 13t3.25.388t3.15 1.162q.725.375 1.163 1.088T20 17.2V20z"/></svg>
+            <input type="text" class="form-fields" name="username" id="username" value="{{uname}}" placeholder=" " minlength="2" autocomplete="on" required>
+            <label for="" class="field-label">Enter username</label>
+        </div>
+        <div class="field-div password-div sec">
+            <svg class="prefix-icon" id="p-ico2"  xmlns="http://www.w3.org/2000/svg" width="45" height="28" viewBox="-1 -1 26 26"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><path fill="currentColor" fill-rule="evenodd" d="M5.25 10.055V8a6.75 6.75 0 0 1 13.5 0v2.055c1.115.083 1.84.293 2.371.824C22 11.757 22 13.172 22 16s0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16s0-4.243.879-5.121c.53-.531 1.256-.741 2.371-.824M6.75 8a5.25 5.25 0 0 1 10.5 0v2.004Q16.676 9.999 16 10H8q-.677-.001-1.25.004zM8 17a1 1 0 1 0 0-2a1 1 0 0 0 0 2m4 0a1 1 0 1 0 0-2a1 1 0 0 0 0 2m5-1a1 1 0 1 1-2 0a1 1 0 0 1 2 0" clip-rule="evenodd"/></svg>
+            <input type="password" class="pass-field form-fields" name="password" id="password" value="{{pwd}}" placeholder=" " pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+            <label for="" class="field-label">Enter password</label>
+            <i class="fa-solid fa-eye-slash suffix-icon" id="p-ico" onclick="change_icon('password','p-ico')"></i>
+        </div>
+        {% if messages %}
+        {% for msg in messages %}
+        {% if msg.tags == "error" %}
+        <div class="msg-div sec">
+            <p>{{msg}}</p>
+        </div>
+        {% endif%}
+        {% endfor%}
+        {% endif%}
+        <button type="submit" class="login-submit-btn form-btn sec" onclick="loader('.spinner-bg','.login-form')"><span>Login &nbsp;<i class="fa-solid fa-arrow-right"></i></span></button>
+    </form>
+</section>
+{% endblock content %} 

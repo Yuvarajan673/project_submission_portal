@@ -1,0 +1,44 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Dashboard | Admin{% endblock title %} {% block content %}
+
+<section class="admin-dash dashboard">
+  <h2>Admin Dashboard</h2>
+  {% if models %}
+  <h3>Tables</h3>
+  <table>
+    <thead>
+        <th>S.No</th>
+        <th>Table Name</th>
+        <th>Total Records</th>
+    </thead>
+    <tbody>
+        {% for model in models %}
+        {% url 'model_details' model.name as model_details %}
+        <tr onclick="window.location.href='{{model_details}}'">
+            <td style="width: 70px;">{{forloop.counter}}</td>
+            <td>{{model.name}}</td>
+            <td>{{model.count}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+{% if show_table %}
+{% include 'admin_layouts/table_view.html' %}
+{% endif %}
+
+
+{% if data.show_template %}
+{% include 'admin_layouts/addorchange_user.html' %}
+{% endif %}
+
+
+{% if data.show %}
+{% include 'admin_layouts/addorchange_user.html' %}
+{% endif %}
+
+
+</section>
+
+{% endblock content %}

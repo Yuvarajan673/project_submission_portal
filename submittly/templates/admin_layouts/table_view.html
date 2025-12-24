@@ -1,0 +1,45 @@
+{% load custom_tags %}
+<div class="table-view">
+    <div class="action-bar">
+        <h3>{{mod_name}}s Table</h3>
+        <div class="filter-btn-group">
+        <form action="{% url 'table_filter' mod_name %}" class="field" method="get">
+            {% if mod_name == 'User' %}
+            <label for="filter-role">Filter role :</label>
+            <select name="filter-role" id="filter-role" onchange="this.form.submit()">
+                <option value="" selected>All</option>
+                <option value="coach" {% if role == 'coach' %}selected{% endif %} >Coach</option>
+                <option value="student" {% if role == 'student' %}selected{% endif %} >Student</option>
+                <option value="admin" {% if role == 'admin' %}selected{% endif %} >Admin</option>
+            </select>
+            {% endif %}
+        </form>
+        {% if mod_name == 'User' %}
+        <a href="{% url 'add_user' mod_name %}?mode=adduser"><button name="adduser" value="adduser" class="other-btn"><span><i class="fa-solid fa-plus"></i>&nbsp; Add User</span></button></a>
+        {% elif mod_name == 'Project' %}
+        <a href="{% url 'add_user' mod_name %}?mode=addproject"><button name="addproject" value="addproject" class="other-btn"><span><i class="fa-solid fa-plus"></i>&nbsp; Add Project</span></button></a>
+        {% endif %}
+    </div>
+    </div>
+    <div class="table-layout">
+    <table>
+        <thead>
+            <th>S.No</th>
+            {% for field in fields %}
+            <th>{{ field|capfirst }}</th>
+            {% endfor %}
+        </thead>
+        <tbody>
+            {% for rcd in users %}
+            {% url 'change_user' rcd.id mod_name as change_user %}
+            <tr onclick="window.location.href='{{change_user}}'">
+                <td>{{forloop.counter}}</td>
+                {% for field in fields %}
+                <td>{{rcd|get_attr:field|default:'Empty'}}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>

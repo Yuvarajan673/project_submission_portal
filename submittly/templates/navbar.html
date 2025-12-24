@@ -1,0 +1,14 @@
+{% load static %}
+<header>
+    <nav class="navbar">
+        <a href="/" class="site-title"><img src="{% static 'images/logo.png' %}" height="30px"></a>
+        <ul class="nav-links">
+            {% if user.is_authenticated %}
+            <li ><a href="{% url 'logout_user' %}" onclick="return confirm('Are you really want to logout')"><button class="logout-btn nav-btn"><span><i class="fa-solid fa-user"></i>&nbsp;&nbsp; {{ user.first_name|title }}</span></button></a></li>
+            {% else %}
+            <li ><a href="{% url 'login_user' %}"><button class="login-btn nav-btn"><span><i class="fa-solid fa-user"></i>&nbsp;&nbsp; Login</span></button></a></li>
+            {% endif %}
+            <!--<li class="register-btn"><a href=""><span>Register</span></a></li>-->
+        </ul>
+    </nav>
+</header> 

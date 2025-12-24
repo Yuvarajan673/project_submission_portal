@@ -1,0 +1,84 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Submission Details | Submittly{% endblock title %}
+{% block content %}
+<section class="submission-details-section dashboard sec">
+    <div class="page-heading sec">
+        <h2>Submission Details</h2>
+        <h4>Coach Dashboard</h4>
+    </div>
+    <div class="submission-side-group">
+        <div class="submission-preview-side">
+            <div class="about-submission">
+                <div class="left-side">
+                    <div>
+                        <p>Student</p>
+                        <h3>{{submission.submitted_by.first_name|capfirst}}</h3>
+                    </div>
+                    <div>
+                        <p>Assignment</p>
+                        <h3>{{submission.submitted_to.title}}</h3>
+                    </div>
+                </div>
+                <div class="right-side">
+                    <div>
+                        <p>Submitted On</p>
+                        <h3>{{submission.submitted_at}}</h3>
+                </div>
+                <div>
+                    <p>Status</p>
+                    <p {% if submission.status == 'pending review' %} class="status-pending" {% else %} class="status-reviewed" {% endif %}>{{submission.status|capfirst}}</p>
+                </div>
+            </div>
+            </div>
+            <div class="submission-link link-div">
+                <h3>Submission Link</h3>
+                <a href="{{submission.ans_doc_link}}" class="link" target="_blank">{{submission.ans_doc_link}}</a>
+            </div>
+            <h3>Feedbacks</h3>
+            <div class="feedback-msg-div">
+                {% if feedbacks %}
+                    {% for feedback in feedbacks %}
+                    <div class="feedback-msg">
+                        <p>{{feedback.feedback|capfirst}}</p>
+                        <p>{{feedback.posted_date}}</p>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No Feedback Posted</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="submission-feedback-side">
+            <div class="grading-div">
+                <h3>Grading</h3>
+                <form class="grading-form" action="{% url 'save_grade' submission.id %}" method="post">
+                    {% csrf_token %}
+                    <label for="excellent">
+                        <input type="radio" name="grade" value="excellent" id="excellent" {% if submission.grade == 'excellent' %} checked {% endif %} required>
+                    Exellent</label>
+                    <label for="good">
+                        <input type="radio" name="grade" value="good" id="good" {% if submission.grade == 'good' %} checked {% endif %} required>
+                    Good</label>
+                    <label for="average">
+                        <input type="radio" name="grade" value="average" id="average" {% if submission.grade == 'average' %} checked {% endif %} required>
+                    Average</label>
+                    <label for="poor">
+                        <input type="radio" name="grade" value="poor" id="poor" {% if submission.grade == 'poor' %} checked {% endif %} required>
+                    Poor</label>
+                    <button type="submit" class="form-btn"><span>Save Grade</span></button>
+                </form>
+            </div>
+            <div class="feedback-div">
+                <h3>Add Feedback</h3>
+                <form class="feedback-form" action="{% url 'save_feedback' submission.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="field-div description-div">
+                        <textarea class="form-fields" name="feedback" rows="7" placeholder="Write feedback for the student" minlength="4" required></textarea>
+                    </div>
+                    <button type="submit" class="form-btn"><span>Submit Feedback</span></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

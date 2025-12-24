@@ -1,0 +1,54 @@
+{% extends 'layouts/regbase.html' %}{% load static %}
+{% block title %} New Project | Submittly {% endblock title %}
+
+{% block content %}
+<section class="project-creation dashboard sec">
+    <form class="create-project submission-form sec" action="{% url 'create_project' %}" method="post">
+        {% csrf_token %}
+        <div class="title-div sec">
+            <img src="{% static 'images/logo.png' %}" width="134px">
+            <h2>Create New Project</h2>
+        </div>
+        {% if project %}
+        <input type="hidden" name="id" value="{{project.id}}">
+        {% endif %}
+        <div class="field-div project-title-div">
+            <svg class="prefix-icon"  xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 4H7v16m0-8h8"/></svg>
+            <input type="text" class="form-fields" name="title" id="title" value="{{project.title}}" maxlength="100" minlength="2" placeholder="Enter the title for the Assignment" autocomplete="on" required>
+            <label for="firstname">Project Title</label>
+        </div>
+        <div class="field-div deadline-div">
+            <svg class="prefix-icon"  xmlns="http://www.w3.org/2000/svg" width="37" height="30" viewBox="-2.5 -2.5 29 29"><!-- Icon from Unicons Solid by Iconscout - https://github.com/Iconscout/unicons/blob/master/LICENSE --><path fill="currentColor" d="M2 19c0 1.7 1.3 3 3 3h14c1.7 0 3-1.3 3-3v-8H2zM19 4h-2V3c0-.6-.4-1-1-1s-1 .4-1 1v1H9V3c0-.6-.4-1-1-1s-1 .4-1 1v1H5C3.3 4 2 5.3 2 7v2h20V7c0-1.7-1.3-3-3-3"/></svg>
+            <input type="datetime-local" class="form-fields" name="deadline" id="deadline" value="{{project.deadline}}" required>
+            <label for="date-joined">Deadline</label>
+        </div>
+        <div class="field-div description-div">
+            <svg class="prefix-icon" xmlns="http://www.w3.org/2000/svg" width="37" height="30" viewBox="0 0 24 24"><!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE --><path fill="currentColor" d="M14 2H4v20h16V8zm2 16H8v-2h8zm0-4H8v-2h8zm-3-5V3.5L18.5 9z"/></svg>
+            <textarea class="form-fields" name="description" id="description"  rows="10" placeholder="Provide a detailed description of the assignment objectives and requirements..." autocomplete="on" required>{{project.description}}</textarea>
+            <label for="firstname">Guidelines & Requirements</label>
+        </div>
+        <div class="field-div document-link-div">
+            <svg class="prefix-icon" xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="0 0 24 24"><!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE --><path fill="currentColor" d="M3.96 11.38C4.24 9.91 5.62 8.9 7.12 8.9h2.93c.52 0 .95-.43.95-.95S10.57 7 10.05 7H7.22c-2.61 0-4.94 1.91-5.19 4.51A4.995 4.995 0 0 0 7 17h3.05c.52 0 .95-.43.95-.95s-.43-.95-.95-.95H7a3.11 3.11 0 0 1-3.04-3.72M9 13h6c.55 0 1-.45 1-1s-.45-1-1-1H9c-.55 0-1 .45-1 1s.45 1 1 1m7.78-6h-2.83c-.52 0-.95.43-.95.95s.43.95.95.95h2.93c1.5 0 2.88 1.01 3.16 2.48A3.11 3.11 0 0 1 17 15.1h-3.05c-.52 0-.95.43-.95.95s.43.95.95.95H17c2.92 0 5.26-2.51 4.98-5.49c-.25-2.6-2.59-4.51-5.2-4.51"/></svg>
+            <input type="url" class="form-fields" name="document_link" id="document-link" value="{{project.document_link}}" placeholder="Paste link here for Assignment (If needed)" autocomplete="on" required>
+            <label for="firstname">Provide Links</label>
+        </div>
+        <div class="or-div">
+            <hr>
+            <p>or</p>
+        </div>
+        <div class="field-div upload-file-div">
+            <svg class="prefix-icon" xmlns="http://www.w3.org/2000/svg" width="37" height="28" viewBox="0 0 24 24"><!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE --><path fill="currentColor" d="M14 2H4v20h16V8zm-1 13v4h-2v-4H8l4.01-4L16 15zm0-6V3.5L18.5 9z"/></svg>
+            <input type="file" class="form-fields" name="file_path" id="upload-file">
+            <label for="firstname">Upload File</label>
+        </div>
+        <div class="submit-btn-group">
+            {% if project %}
+            <button type="submit" class="form-btn" name="action" value="save"><span>Save</span></button>
+            {% else %}
+            <button type="submit" class="form-btn" name="action" value="createproject"><span>Create Project</span></button>
+            {% endif %} 
+            <button class="form-btn" name="action" value="cancel" formnovalidate><span>Cancel</span></button>
+        </div>
+    </form>
+</section>
+{% endblock content %}
