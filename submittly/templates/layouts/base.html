@@ -10,8 +10,10 @@
     <title>{% block title %}{% endblock title %}</title>
   </head>
   <body>
-    {% include 'navbar.html' %}
-    <main>{% block content %} {% endblock content %}</main>
+    <main>
+      {% include 'navbar.html' %}
+      {% block content %} {% endblock content %}
+    </main>
     {% include 'message.html' %}
     <!-- {% include 'footer.html' %} -->
      <span id="userrole" data-role="{{user.role}}"></span>

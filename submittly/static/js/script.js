@@ -127,3 +127,18 @@ function submitAttForm(att_form){
     const attForm=document.querySelector(att_form)
     attForm.submit()
 }
+
+
+
+
+// dropdown
+const dropbtn = document.querySelector('.dropbtn')
+const dropdown_content = document.querySelector('.dropdown-content')
+
+dropbtn.addEventListener("click",(e)=>{
+    e.stopPropagation();
+    dropdown_content.classList.add("active")
+})
+document.addEventListener("click",()=>{
+    dropdown_content.classList.remove("active")
+})

@@ -23,12 +23,12 @@
                     <div>
                         <p>Submitted On</p>
                         <h3>{{submission.submitted_at}}</h3>
+                    </div>
+                    <div>
+                        <p>Status</p>
+                        <p {% if submission.status == 'pending review' %} class="status-pending" {% else %} class="status-reviewed" {% endif %}>{{submission.status|capfirst}}</p>
+                    </div>
                 </div>
-                <div>
-                    <p>Status</p>
-                    <p {% if submission.status == 'pending review' %} class="status-pending" {% else %} class="status-reviewed" {% endif %}>{{submission.status|capfirst}}</p>
-                </div>
-            </div>
             </div>
             <div class="submission-link information-div">
                 <h3>Submission Link</h3>
