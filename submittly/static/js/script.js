@@ -134,11 +134,50 @@ function submitAttForm(att_form){
 // dropdown
 const dropbtn = document.querySelector('.dropbtn')
 const dropdown_content = document.querySelector('.dropdown-content')
+if (dropbtn){
+    dropbtn.addEventListener("click",(e)=>{
+        e.stopPropagation();
+        dropdown_content.classList.add("active")
+    })
+    document.addEventListener("click",()=>{
+        dropdown_content.classList.remove("active")
+    })
+}
 
-dropbtn.addEventListener("click",(e)=>{
-    e.stopPropagation();
-    dropdown_content.classList.add("active")
+
+
+// Image Preview
+const noImage = document.querySelector('.no-image')
+const imgInput = document.querySelector('.profile-image-file-input')
+const profileText = document.querySelector('.profile-text')
+const previousImage = document.querySelector('.previous-image')
+
+var imagePlaceholder = NaN
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+    if (noImage){
+        profileText.style.display = 'block'
+        noImage.style.display = 'none'
+        imagePlaceholder = noImage
+
+    }
+    else if(previousImage){
+        profileText.style.display = 'none'
+        previousImage.style.display = 'block'
+        imagePlaceholder = previousImage
+    }
 })
-document.addEventListener("click",()=>{
-    dropdown_content.classList.remove("active")
-})
+
+
+if(imagePlaceholder,imgInput,profileText){
+    imgInput.addEventListener("change",()=>{
+        if(imgInput.files && imgInput.files[0]){
+            imgFile = imgInput.files[0]
+            imagePlaceholder.src = URL.createObjectURL(imgFile)
+            profileText.style.display = 'none'
+            imagePlaceholder.classList.add('profile-image')
+            imagePlaceholder.style.display = 'block'
+        }
+    })
+}

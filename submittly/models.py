@@ -1,6 +1,15 @@
+import os
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+
+
+def getFilePath(instance,filename):
+    extension = os.path.splitext(filename)[1] #It gives the extension of the file eg: .png .jpg or .jpeg
+    return f"profile_images/{instance.username}{extension}"
+
+
 
 # Create your models here.
 
@@ -17,6 +26,7 @@ class User(AbstractUser):
     ]
     role=models.CharField(max_length=15,choices=ROLE_CHOICES)
     section=models.CharField(max_length=1,choices=SECTION_CHOICE,blank=True,null=True)
+    profile_image=models.ImageField(upload_to=getFilePath,blank=True,null=True)
 
 class Project(models.Model):
     title=models.CharField(max_length=255)

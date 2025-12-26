@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views,models
+from . import views
 
 urlpatterns=[
     # Home Route
@@ -16,6 +16,13 @@ urlpatterns=[
     
     # Error Page Route
     path('error/403/',views.error_page,name='error_page'),
+
+
+    # Profile
+    path('user/profile/<int:user_id>/',views.user_profile,name='user_profile'),
+    path('user/profile/upload/profile/image/',views.upload_profile_image,name='upload_profile_image'),
+    path('user/profile/remove/profile/image/',views.remove_profile_image,name='remove_profile_image'),
+    
 
 
 

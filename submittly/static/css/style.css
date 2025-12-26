@@ -103,11 +103,11 @@ main{
 }
 .appear-msg{
     right: 30px;
-    animation: appear .3s cubic-bezier(0.78, 0.28, 0.49, 1.5);
+    animation: appear .4s cubic-bezier(0.78, 0.28, 0.49, 1.5);
 }
 @keyframes appear {
     0%{ display: none;
-        right: -315px;
+        right: -1000px;
     }
     100%{
         right: 30px;
@@ -115,15 +115,15 @@ main{
 }
 
 .disappear-msg{
-    right: -315px;
-    animation: disappear .3s cubic-bezier(0.47, -0.71, 0.27, 0.84);
+    right: -1000px;
+    animation: disappear .4s cubic-bezier(0.47, -0.71, 0.27, 0.84);
 }
 @keyframes disappear {
     0%{
         right: 30px;
     }
     100%{
-        right: -315px;
+        right: -1000px;
         display: none;
     }
 }
@@ -437,9 +437,9 @@ main{
 .navbar{
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: 1;
     width: 30px;
-    height: 95.5vh;
+    height: 95.4vh;
     display:flex;
     flex-direction: column;
     gap: 15px;
@@ -460,6 +460,7 @@ main{
     opacity: 0;
     visibility: hidden;
     transition: opacity .3s;
+    z-index: 2;
 }
 .nav-link::after{
     content: '';
@@ -501,7 +502,8 @@ main{
 .dropbtn{
     background-color: var(--purple);
     color: var(--white);
-    padding: 10px 12px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     font-weight: bold;
     border: none;
@@ -522,7 +524,7 @@ main{
     border-radius: 5px;
     box-shadow: 0 0 15px #0000005c;
     background-color: var(--white);
-    transition: opacity .2s ease;
+    transition: opacity .2s ease, visibility .3s ease;
 }
 .dropdown .active{
     visibility: visible;
@@ -884,7 +886,7 @@ tr:has(td:hover){
 .icon-group{
     display: flex;
     align-items: center;
-    height: 20px;
+    /* height: 20px; */
     gap: 8px;
 }
 .icon-group > h3{
@@ -1181,6 +1183,210 @@ input.late:checked + .for-late{
     margin-top: 10px;
 }
 
+
+
+
+
+
+/* Profile Page */
+.user-profile-section{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+.profile-div{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.remove-profile-image-btn{
+    width: unset;
+    margin-top: 10px;
+}
+.profile-image-div{
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 40px;
+    line-height: 100px;
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    border: 3px solid var(--purple);
+    position: relative;
+}
+.profile-image-div > svg{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    padding: 3px;
+    background-color: var(--white);
+    border-radius: 50%;
+}
+.profile-details-div{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+.personal-info-div,
+.account-overview-div{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex-grow: 1;
+}
+.profile-firstname-lastname-div{
+    display: flex;
+    flex-direction: column;
+    gap: 35px !important;
+}
+.profile-edit-icon-group-div{
+    display: flex;
+    justify-content: space-between;
+}
+.profile-edit-icon-group-div > a > svg{
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color .2s;
+}
+.profile-edit-icon-group-div > a > svg:hover{
+    background-color: var(--purple);
+    color: var(--white);
+}
+
+
+.profile-text-div{
+    margin: 5px;
+    gap: 20px;
+    padding: 15px;
+    background-color: var(--white);
+    border-radius: 3px;
+    min-width: 250px;
+    cursor: pointer;
+    box-shadow: 0 0 4px #00000033;
+    transition: background-color .2s ease;
+}
+.profile-text-div:first-child{
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+.profile-text-div:last-child{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.profile-text-div:hover{
+    background-color: #f0f0f0;
+}
+/* .personal-info,
+.account-overview{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px #00000033;
+    background-color: var(--white);
+} */
+
+
+/* profile image model */
+.modal-backdrop{
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 10;
+    visibility: hidden;
+    cursor: default;
+    transition: backdrop-filter .3s, visibility .3s;
+}
+.modal{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px #00000042;
+    transform: translate(-50%,-50%) scale(0.9);
+    opacity: 0;
+    background-color: var(--white);
+    transition: transform .3s cubic-bezier(0.33, 0.23, 0.63, 1.52) , opacity .2s ease;
+}
+.profile-image-modal{
+    width: 300px;
+}
+.firstname-lastname-modal{
+    width: 400px;
+}
+
+/* Animating the Modal */
+.modal-backdrop:target{
+    visibility: visible;
+    backdrop-filter: blur(10px);
+}
+.modal-backdrop:target > .modal{
+    transform: translate(-50%,-50%) scale(1);
+    opacity: 1;
+}
+
+/* Modal Head */
+.modal-head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal-head .close-btn{
+    font-size: 30px;
+    height: 30px;
+    width: 30px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color .2s,color .2s;
+}
+.modal-head .close-btn:hover{
+    background-color: var(--purple);
+    color: var(--white);
+}
+
+/* Modal Body */
+.profile-image-update-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+.modal-body .profile-image-file-input{
+    display: none;
+}
+.modal-body .profile-image-upload-label{
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 40px;
+    line-height: 150px;
+    height: 150px;
+    width: 150px;
+    border-radius: 50%;
+    border: 3px solid var(--purple);
+    overflow: hidden;
+}
+.image-placeholder{
+    display: none;
+}
+
+.profile-image{
+    height: inherit;
+    width: inherit;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center;
+}
 
 
 

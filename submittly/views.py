@@ -203,6 +203,37 @@ def register(request):
     return render(request,'register.html')
 
 
+
+
+# Profile page
+@login_required
+def user_profile(request,user_id):
+    return render(request,'profile.html')
+
+
+def upload_profile_image(request): 
+    if request.method == 'POST' and request.FILES.get('profile-image'):
+        if User.objects.get(id=request.user.id).profile_image:
+            filepath = User.objects.get(id=request.user.id).profile_image.path
+            if os.path.exists(filepath):
+                os.remove(filepath)
+        request.user.profile_image = request.FILES.get('profile-image')
+        request.user.save()
+        messages.success(request,"Profile Image Updated Successfully")
+    return redirect(f"{request.META['HTTP_REFERER']}")
+
+
+def remove_profile_image(request):
+    filepath = User.objects.get(id=request.user.id).profile_image.path
+    if os.path.exists(filepath):
+        os.remove(filepath)
+        User.objects.get(id=request.user.id).profile_image.delete()
+        messages.success(request,"Profile Image Removed Successfully")
+    return redirect(f"{request.META['HTTP_REFERER']}")
+
+
+
+
 @login_required(login_url='/error/403/')
 def student_dashboard(request):
     if check_redirection(request):
