@@ -1,4 +1,6 @@
 from datetime import date, datetime
+import calendar
+import math
 import time, random
 from django.shortcuts import *
 from .models import *
@@ -14,6 +16,7 @@ from django.contrib.auth import authenticate,login,logout
 
 
 #CUSTOM FUNCTIONS
+# Redirecting the request to corresponding dashboard
 def check_redirection(request):
     if request.user.role == 'admin' and request.path != '/dashboard/admin/':
         return redirect('/dashboard/admin/')
@@ -39,6 +42,7 @@ def order_fields(flds,custom_fields=[
         
     return ordered_fields
 
+
 def get_own_fields(fields,custom_fields):
     cus_fld=[]
     for i in custom_fields:
@@ -52,6 +56,21 @@ def get_fields(model):
     for f in model._meta.fields:
         fields.append(f.name)
     return fields
+
+
+# Generate OTP and sends it to given email.
+# And also creates the sessions to the request,
+# that contain email, OTP and OTP created time.
+def send_otp_to_email(request,email):
+    otp=random.randint(100000,999999)
+    request.session['otp']=otp
+    request.session['user_email']=email
+    request.session['otp_created_time']=time.time()
+    subject= "Verify Your Email Address"
+    message=f"Use the verification code below to complete your registration.\n\n {otp} \n\n It will expire in 5 minutes."
+    from_email="submittly.noreply@gmail.com"
+    send_mail(subject,message,from_email,[email])
+
 
 
 
@@ -110,22 +129,14 @@ def logout_user(request):
 
 
 
+
+
 def send_otp(request):
     if request.user.is_authenticated:
         return redirect('/')
     if request.method=='POST':
         email=request.POST.get('email').strip()
-        
-        otp=random.randint(100000,999999)
-
-        request.session['otp']=otp
-        request.session['user_email']=email
-        request.session['otp_created_time']=time.time()
-
-        subject= "Verify Your Email Address"
-        message=f"Use the verification code below to complete your registration.\n\n {otp} \n\n It will expire in 5 minutes."
-        from_email="submittly.noreply@gmail.com"
-        send_mail(subject,message,from_email,[email])
+        send_otp_to_email(request,email)
         messages.success(request, "Verification Code Sent To your Email")
         return redirect('/verify/')
 
@@ -232,7 +243,21 @@ def remove_profile_image(request):
     return redirect(f"{request.META['HTTP_REFERER']}")
 
 
+def update_first_and_last_name(request):
+    if request.method == 'POST':
+        data = {key:value for key,value in request.POST.items() if key != 'csrfmiddlewaretoken'}
+        User.objects.filter(id=request.user.id).update(**data)
+        messages.success(request,"Profile Name Updated Successfully")
+    return redirect(f"{request.META['HTTP_REFERER']}")
 
+
+
+
+""" 
+===============================================
+Student Dashboard
+=============================================== 
+"""
 
 @login_required(login_url='/error/403/')
 def student_dashboard(request):
@@ -315,6 +340,17 @@ def del_mysub(request,p_id):
 
 
 
+
+
+
+
+
+""" 
+===============================================
+Coach Dashboard
+=============================================== 
+"""
+
 @login_required(login_url='/error/403/')
 def coach_dashboard(request):
     if check_redirection(request):
@@ -333,6 +369,50 @@ def coach_dashboard(request):
     for pro in projects:
         sub_count[pro.id]=Submission.objects.filter(submitted_to=pro).count()
     return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'sections':sections})
+
+
+
+
+def attendance_report(request):
+    # Getting the form data from the request
+    year = int(request.GET.get("year", date.today().year))
+    month = int(request.GET.get("month", date.today().month))
+    student = int(request.GET.get("student", User.objects.filter(section=request.user.section,role='student').order_by('first_name').first().id))
+
+    # Getting the attendance for selected month and year for selected student 
+    attendance_rcd = Attendance.objects.filter(student_id=student,
+                                               date__year=year,
+                                               date__month=month)
+    # Mapping the date and attendance eg:{31:present,...}
+    attendance_map = {rcd.date.day:rcd.status for rcd in attendance_rcd}
+
+    att_summary = {
+        'present':attendance_rcd.filter(status='present').count(),
+        'absent':attendance_rcd.filter(status='absent').count(),
+        'late':attendance_rcd.filter(status='late').count(),
+        'attendance':math.floor((attendance_rcd.filter(status='present').count()/calendar.monthrange(year,month)[1])*100)
+    }
+    cal = calendar.Calendar() # Creating the cal Object
+    month_days = cal.monthdayscalendar(year,month) # Getting the month days
+    # Hardcoded data
+    years = [2023,2024,2025,2026]
+    months = {
+    1: "January", 2: "February", 3: "March", 4: "April",
+    5: "May", 6: "June", 7: "July", 8: "August",
+    9: "September", 10: "October", 11: "November", 12: "December"
+    } 
+    
+    students = User.objects.filter(section=request.user.section,role='student').order_by('first_name')
+    return render(request,"coach_layouts/attendance_report.html",{
+        'months':months, # Gives the list of months to show in the select tag's option
+        'years':years, # Gives the list of years to show in the select tag's option
+        'students':students, # Gives the list of students to show in the select tag's option
+        'attendance_map':attendance_map, # Mapped attendance date to mark calendar
+        'month_days':month_days, # Gives the dates of selected month to generate calendar dates
+        'student':User.objects.get(id=student), # Gives the student name to check in select tag
+        'month_name':calendar.month_name[month], # Gives month name to check in the select tag
+        'year':year,
+        'att_summary':att_summary}) # Gives the year to check in the select tag
 
 
 

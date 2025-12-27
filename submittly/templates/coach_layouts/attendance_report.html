@@ -1,0 +1,98 @@
+{% extends 'layouts/base.html' %}{% load custom_tags %}
+{% block title %}Attendance Report | Submittly{% endblock title %}
+
+{% block content %}
+<section class="attendance-report-section dashboard">
+    <div class="calendar-fetch-header">
+        <form accept="{% url 'attendance_report' %}" method="get" class="calendar-fetch-form action-bar">
+            <div class="year-month-select-group-div">
+                <label for="select-year" class="select-year-label">Select Year
+                    <select name="year" onchange="form.submit()" id="select-year" class="select-year select" required>
+                        {% for yr in years %}
+                        <option value="{{yr}}" {% if yr == year %} selected {% endif %}>{{yr}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="select-month" class="select-month-label">Select Month
+                    <select name="month" onchange="form.submit()" id="select-month" class="select-month select" required>
+                        {% for month in months %}
+                        <option value="{{month}}" {% if month_name ==  months|get_items:month %} selected {% endif %} >{{months|get_items:month}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="select-student" class="select-student-label">Select Student
+                    <select name="student" onchange="form.submit()" id="select-student" class="select-student select" required>
+                        {% for stu in students %}
+                        <option value="{{stu.id}}" {% if stu.first_name == student.first_name %} selected {% endif %}>{{stu.first_name|capfirst}} {{stu.last_name|capfirst}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+            <a href="{% url 'attendance_report' %}?year={{ ''|cur_year }}&month={{''|cur_month}}&student={{student.id}}">
+                <button type="button" class="calendar-today-btn form-btn">Today</button>
+            </a>
+        </form>
+
+        <div class="attendance-report-div">
+            <h2 class="page-heading">Attendance Report</h2>
+            <div class="first-row">
+                <div class="info-box present-stat">
+                    <div>
+                        <p>Present</p>
+                        <h2>{{att_summary|get_items:'present'}} Days</h2>
+                    </div>
+                </div>
+                <div class="info-box absent-stat">
+                    <div>
+                        <p>Absent</p>
+                        <h2>{{att_summary|get_items:'absent'}} Days</h2>
+                    </div>
+                </div>
+                <div class="info-box late-stat">
+                    <div>
+                        <p>Late</p>
+                        <h2>{{att_summary|get_items:'late'}} Days</h2>
+                    </div>
+                </div>
+                <div class="info-box attendance-stat">
+                    <div>
+                        <p>Attendance</p>
+                        <h2>{{att_summary|get_items:'attendance'}} %</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="calendar-div">
+                <h2 class="calendar-month">{{month_name}} {{year}}</h2>
+                <div class="calendar-days-div">
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                    <div>Sun</div>
+                </div>
+                <div class="calendar-dates-div">
+                    {% for week in month_days %}
+                        {% for day in week %}
+                            {% if day == 0 %}
+                            <div class="empty-date"></div>
+                            {% else %}
+                                <div class="{{attendance_map|get_items:day}}-date date-group">
+                                    <h3>{{day}}</h3>
+                                    {% if attendance_map|get_items:day != None %}
+                                    <p>{{attendance_map|get_items:day|capfirst}}</p>
+                                    {% else %}
+                                    <p>Not Marked</p>
+                                    {% endif %}
+                                </div>
+        
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

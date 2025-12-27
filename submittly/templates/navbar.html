@@ -6,10 +6,17 @@
         <ul class="nav-links">
             <div class="top">
                 <li>
-                    <a href="/" class="nav-link" data-label="Dashboard" style="--tooltip-color: var(--black);">
+                    <a href="/" class="nav-link" data-label="Dashboard" style="--tooltip-color: var(--purple);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"><!-- Icon from Plump free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"><path d="M9.854 32A15 15 0 0 1 9 27c0-8.284 6.716-15 15-15s15 6.716 15 15c0 1.753-.3 3.436-.853 5"/><path d="M34 38h6.078c1.215 0 2.397-.539 2.945-1.623C44.342 33.769 45 30.105 45 27c0-11.598-9.402-21-21-21S3 15.402 3 27c0 3.105.659 6.77 1.977 9.377C5.525 37.46 6.707 38 7.923 38H14"/><path d="M20.136 34.965a4 4 0 1 0 7.728 2.07a4 4 0 1 0-7.728-2.07m4.899-2.829l3.623-13.523"/></g></svg>
                     </a>
                 </li>
+                {% if request.user.role == 'coach' %}
+                <li>
+                    <a href="{% url 'attendance_report' %}" class="nav-link" data-label="Attendance Report" style="--tooltip-color: var(--purple);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c0-3.771 0-5.657 1.172-6.828S6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172S22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828S17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172S2 17.771 2 14z"/><path stroke-linecap="round" d="M7 4V2.5M17 4V2.5M2 9h20" opacity=".5"/><path stroke-linecap="round" stroke-linejoin="round" d="m9 14.5l1.5-1.5v4"/><path stroke-linecap="round" d="M13 16v-2a1 1 0 1 1 2 0v2a1 1 0 1 1-2 0Z"/></g></svg>
+                    </a>
+                </li>
+                {% endif %}
                 <!-- <li>
                     <a href="/" class="nav-link" data-label="Attendance" style="--tooltip-color: var(--ico-orange);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M21 2.75h-2a.25.25 0 0 1-.25-.25V1.25a1 1 0 0 0-2 0v4.16a1 1 0 0 0 2 0V5a.25.25 0 0 1 .25-.25h1.5a.5.5 0 0 1 .5.5v10.5a.5.5 0 0 1-.5.5h-3a2 2 0 0 0-2 2v3a.5.5 0 0 1-.5.5H3.5a.5.5 0 0 1-.5-.5v-16a.5.5 0 0 1 .5-.5h1a.25.25 0 0 0 .25-.25V3a.25.25 0 0 0-.25-.25H3a2 2 0 0 0-2 2v17a2 2 0 0 0 2 2h13.5a1 1 0 0 0 .74-.32l5.5-6a1 1 0 0 0 .26-.68v-12a2 2 0 0 0-2-2"/><path fill="currentColor" d="M12.25 6.41a1 1 0 0 0 1-1V5a.25.25 0 0 1 .25-.25h2a.25.25 0 0 0 .25-.25V3a.25.25 0 0 0-.25-.25h-2a.25.25 0 0 1-.25-.25V1.25a1 1 0 0 0-2 0v4.16a1 1 0 0 0 1 1m-5.5 0a1 1 0 0 0 1-1V5A.25.25 0 0 1 8 4.75h2a.25.25 0 0 0 .25-.25V3a.25.25 0 0 0-.25-.25H8a.25.25 0 0 1-.25-.25V1.25a1 1 0 0 0-2 0v4.16a1 1 0 0 0 1 1m.04 6.05a1 1 0 0 0 1.42 0l3-3A1 1 0 0 0 9.79 8L7.5 10.34l-.79-.8A1 1 0 0 0 5.29 11Zm0 5.54a1 1 0 0 0 1.42 0l3-3a1 1 0 0 0-1.42-1.42L7.5 15.84L6.71 15a1 1 0 0 0-1.42 1.42ZM13 10.75a1 1 0 0 0 1 1h4a1 1 0 0 0 0-2h-4a1 1 0 0 0-1 1"/></svg>

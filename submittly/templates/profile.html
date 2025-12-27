@@ -23,8 +23,10 @@
         <div class="modal-backdrop" id="profile-image-change-modal">
             <div class="profile-image-modal modal">
                 <div class="modal-head">
-                    <h2>Choose Profile Image</h2>
-                    <a onclick="window.history.back()" class="close-btn">&times;</a>
+                    <div class="close-btn-div">
+                        <a onclick="window.history.back();" class="close-btn">&times;</a>
+                    </div>
+                    <h2 class="modal-title">Choose Profile Image</h2>
                 </div>
                 <div class="modal-body">
                     <form action="{% url 'upload_profile_image'  %}" method="post" enctype="multipart/form-data" class="profile-image-update-form">
@@ -68,26 +70,23 @@
                         <div class="modal-backdrop" id="edit-firstname-lastname-modal">
                             <div class="firstname-lastname-modal modal">
                                 <div class="modal-head">
-                                    <h2>Change Firstname and Lastname</h2>
-                                    <a onclick="return window.history.back()" class="close-btn">&times;</a>
+                                    <div class="close-btn-div">
+                                        <a onclick="window.history.back(); window.location.replace(window.location.pathname)" class="close-btn">&times;</a>
+                                    </div>
+                                    <h2 class="modal-title">Change Firstname and Lastname</h2>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{% url 'upload_profile_image'  %}" method="post" enctype="multipart/form-data" class="profile-image-update-form">
+                                    <form class="profile-firstname-lastname-form" action="{% url 'update_first_and_last_name'  %}" method="post">
                                         {% csrf_token %}
-                                        <!-- Image Upload Label -->
-                                        <label for="profile-image-file-input" class="profile-image-upload-label">
-                                            <p class="profile-text">YS</p>
-                                            {% if user.profile_image %}
-                                            <img src="{{user.profile_image.url}}" class="previous-image profile-image ">
-                                            {% else %}
-                                            <img src="#" class="no-image">
-                                            {% endif %}
-                                        </label>
-                                        <!-- Image File Input -->
-                                        <input type="file" accept=".png, .jpg, .jpeg" name="profile-image" class="profile-image-file-input" id="profile-image-file-input" required>
-                                        <!-- Image Tag -->
-                                        <!-- Image Upload Button -->
-                                        <button type="submit" class="form-btn">Update Profile</button>
+                                        <div class="form-field-div">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 4H7v16m0-8h8"/></svg>
+                                            <input type="text" class="firstname-field form-field" name="first_name" value="{{user.first_name|capfirst}}">
+                                        </div>
+                                        <div class="form-field-div">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16h10"/></svg>
+                                            <input type="text" class="lastname-field form-field" name="last_name" value="{{user.last_name|capfirst}}">
+                                        </div>
+                                        <button type="submit" class="form-btn">Save</button>
                                     </form>
                                 </div>
                             </div>
@@ -133,7 +132,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 48 48"><!-- Icon from Plump free icons by Streamline - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"><path d="M25 29.999c7.99-.017 13.372-.233 16.512-.414c2.076-.12 3.752-1.591 3.992-3.656C45.757 23.76 46 20.5 46 16s-.243-7.76-.496-9.93c-.24-2.064-1.916-3.535-3.991-3.655C38.243 2.226 32.543 2 24 2q-1.028 0-2 .004M12.5 34v11M6 9.5a6.5 6.5 0 1 0 13 0a6.5 6.5 0 0 0-13 0"/><path d="M28.539 16.338c.625.036 1.192.379 1.326.99c.144.656.226 1.675-.035 3.103c-.143.781-.809 1.342-1.596 1.45L20 23l-1.8 19.32c-.12 1.284-1.05 2.343-2.33 2.49a29 29 0 0 1-3.303.19c-1.263 0-2.403-.084-3.318-.185c-1.338-.149-2.3-1.275-2.373-2.62l-.618-11.317a67 67 0 0 1-2.578-.183a1.82 1.82 0 0 1-1.654-1.889c.117-3.77.593-7.216.989-9.515c.298-1.728 1.762-2.977 3.514-3.062c6.958-.338 14.84-.302 22.01.11Z"/></g></svg>
                     <div>
                         <h3>Section</h3>
-                        <h4>{{user.section}}</h4>
+                        <h4> {% if section != 'None' %} {{user.section}} {% else %} --|-- {% endif %}</h4>
                     </div>
                 </div>
                 <div class="icon-group profile-role-div profile-text-div">
@@ -161,4 +160,7 @@
         </div>
     </div>
 </section>
+<script>
+    const USER_ID = "{{user.id}}"
+</script>
 {% endblock content %}

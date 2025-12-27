@@ -22,6 +22,7 @@ urlpatterns=[
     path('user/profile/<int:user_id>/',views.user_profile,name='user_profile'),
     path('user/profile/upload/profile/image/',views.upload_profile_image,name='upload_profile_image'),
     path('user/profile/remove/profile/image/',views.remove_profile_image,name='remove_profile_image'),
+    path('user/profile/update/name/',views.update_first_and_last_name,name='update_first_and_last_name'),
     
 
 
@@ -36,6 +37,7 @@ urlpatterns=[
 
     # Coach Dashboard Routes
     path('dashboard/coach/',views.coach_dashboard,name='coach_dashboard'),
+    path('dashboard/coach/attendance/report',views.attendance_report,name='attendance_report'),
     path('create/project/',views.create_project,name='create_project'),
     path('section/<str:sec>/students/',views.get_sec_students,name='get_sec_students'),
     path('attendance/save/<str:sec>/',views.save_attendance,name='save_attendance'),

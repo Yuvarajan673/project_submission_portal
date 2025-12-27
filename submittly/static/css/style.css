@@ -458,6 +458,7 @@ main{
     border-radius: 5px;
     transform: translateX(45px);
     opacity: 0;
+    text-wrap-mode: nowrap;
     visibility: hidden;
     transition: opacity .3s;
     z-index: 2;
@@ -1027,8 +1028,6 @@ input.late:checked + .for-late{
     flex-direction: column;
     gap: 25px;
     flex-grow: 1;
-    width: 880px;
-    max-width: 980px;
 }
 .project-info-div{
     display: flex;
@@ -1047,13 +1046,11 @@ input.late:checked + .for-late{
 }
 
 .submit-answer-div{
-    padding: 30px 20px;
-    flex-basis: 0;
-    flex-grow: 1;
-    width: 100%;
     height: 300px;
     position: sticky;
     top: 25px;
+    flex-basis: 0;
+    flex-grow: 1;
 }
 .submit-answer-div form{
     display: flex;
@@ -1299,6 +1296,7 @@ input.late:checked + .for-late{
     z-index: 10;
     visibility: hidden;
     cursor: default;
+    background-color: #00000033;
     transition: backdrop-filter .3s, visibility .3s;
 }
 .modal{
@@ -1316,14 +1314,12 @@ input.late:checked + .for-late{
 .profile-image-modal{
     width: 300px;
 }
-.firstname-lastname-modal{
-    width: 400px;
-}
+
 
 /* Animating the Modal */
 .modal-backdrop:target{
     visibility: visible;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(5px);
 }
 .modal-backdrop:target > .modal{
     transform: translate(-50%,-50%) scale(1);
@@ -1331,12 +1327,13 @@ input.late:checked + .for-late{
 }
 
 /* Modal Head */
-.modal-head{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.close-btn-div{
+    height: 30px;
+    position: relative;
 }
 .modal-head .close-btn{
+    position: absolute;
+    right: 0;
     font-size: 30px;
     height: 30px;
     width: 30px;
@@ -1349,6 +1346,9 @@ input.late:checked + .for-late{
 .modal-head .close-btn:hover{
     background-color: var(--purple);
     color: var(--white);
+}
+.modal-head .modal-title{
+    text-align: center;
 }
 
 /* Modal Body */
@@ -1389,7 +1389,209 @@ input.late:checked + .for-late{
 }
 
 
+/* Firstname Lastname edit modal */
+.firstname-lastname-modal{
+    width: 400px;
+}
+/* Firstname Lastname form */
+.profile-firstname-lastname-form{
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    gap: 20px;
+    width: 350px;
+    height: 190px;
+    margin: auto;
+    margin-top: 30px;
+}
+.form-field-div{
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    border-radius: 10px;
+    border: 1.5px solid #ccc;
+    overflow: hidden;
+    transition: border .2s;
+}
+.form-field-div > svg{
+    color: var(--grey);
+}
+.form-field{
+    padding: 10px 5px;
+    font-size: larger;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+.form-field-div:has(.form-field:focus-within){
+    border: 1.5px solid var(--purple);
+}
 
+
+
+
+
+
+/* =========================================================
+   ATTENDANCE REPORT
+========================================================= */
+
+/* Calendar Fetch Form */
+.calendar-fetch-form{
+    padding: unset;
+}
+.year-month-select-group-div{
+    display: flex;
+    gap: 20px;
+}
+/* .calendar-fetch-form select{
+    padding: 10px;
+    width: 100px;
+    border-radius: 10px;
+    appearance: none;
+    outline: none;
+    border: 1.5px solid var(--grey);
+    transition: border .2s ;
+}
+.calendar-fetch-form select:focus-within{
+    border: 1.5px solid var(--purple);
+} */
+
+
+.select-year-label,
+.select-student-label,
+.select-month-label{
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* This is for Select Tag */
+.select{
+    width: 300px;
+    padding: 10px;
+    border: 1.5px solid var(--grey);
+    cursor: pointer;
+}
+.select:hover{
+    background-color: #0000000f;
+}
+.select:focus-within{
+    border: 1.5px solid var(--purple);
+}
+
+/* Change the default style into new = */
+.calendar-fetch-form select,
+.calendar-fetch-form ::picker(select) {
+  appearance: base-select;
+}
+
+/* This CSS selector selects the dropdown list */
+.calendar-fetch-form ::picker(select) {
+  border-radius: 8px;
+  border: 1.5px solid var(--grey);
+}
+
+/* This styles for each options */
+.calendar-fetch-form option{
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+}
+/* This apply the checkmark for the selected option */
+.calendar-fetch-form option::checkmark{  
+    content: "✔";
+}
+ /* This selector apply style for the selected option */
+.calendar-fetch-form option:checked{
+    background-color: var(--purple);
+    color: var(--white);
+}
+.calendar-today-btn{
+    width: 150px;
+}
+
+
+
+
+
+/* Attendance Report div */
+.present-stat{
+    box-shadow: 0 0 4px #00000033,
+    5px 5px 0 var(--ico-green);
+}
+.absent-stat{
+    box-shadow: 0 0 4px #00000033,
+    5px 5px 0 var(--red);
+}
+.late-stat{
+    box-shadow: 0 0 4px #00000033,
+    5px 5px 0 var(--ico-orange);
+}
+.attendance-stat{
+    box-shadow: 0 0 4px #00000033,
+    5px 5px 0 var(--ico-purple);
+}
+.calendar-div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 35px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 4px #00000033;
+    background-color: var(--white);
+}
+.calendar-month{
+    padding-bottom: 20px;
+}
+.calendar-days-div{
+    display: grid;
+    grid-template-columns: repeat(7,175px);
+    grid-template-rows: 40px;
+    gap: 15px;
+    text-align: center;
+}
+.calendar-dates-div{
+    display: grid;
+    grid-template-columns: repeat(7,175px);
+    grid-template-rows: repeat(6,85px);
+    gap: 15px;
+}
+.calendar-dates-div div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align:center;
+    border-radius: 10px;
+    color: var(--grey);
+    background-color: #0000000f;
+    cursor: pointer;
+    transition: transform .2s;
+}
+.calendar-dates-div div:hover{
+    transform: scale(1.05);
+}
+
+
+.calendar-dates-div .empty-date{
+    background-color: var(--white);
+}
+
+.calendar-dates-div .present-date{
+    background-color: #00ff1522;
+    color: #006500;
+}
+.calendar-dates-div .absent-date{
+    background-color: #ff000022;
+    color: #c45500;
+}
+.calendar-dates-div .late-date{
+    background-color: #ffd00034;
+    color: #f97316;
+}
 
 
 /* =========================================================

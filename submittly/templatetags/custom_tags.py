@@ -1,3 +1,4 @@
+from datetime import date
 from django import template
 
 register = template.Library()
@@ -13,3 +14,12 @@ def get_items(dictionary,key):
 @register.filter
 def index(lst,i):
     return lst[i]
+
+@register.filter
+def cur_year(val):
+    return date.today().year
+
+
+@register.filter
+def cur_month(val):
+    return date.today().month
