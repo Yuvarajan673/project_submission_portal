@@ -1,0 +1,37 @@
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
+{% block title %}All Sections | Submittly{% endblock title %}
+{% block content %}
+<section class="dashboard">
+    <div class="quick-info sec">
+    <h2>Sections</h2>
+    <div class="first-row">
+      {% for sec in sections %}
+      <a href="{% url 'get_sec_students' sec %}" class="stats">
+        <div class="stats-body">
+          <div>
+            <p>📚 Sec {{sec}}</p>
+            <h2>{{sections|get_items:sec|get_items:'tot_stu'}}</h2>
+            <p>Total Students</p>
+          </div>
+          <div class="sub-stats-group">
+            <div class="sub-stats present">
+              <p class="sub-stats-title ">Present</p>
+              <h3 class="sub-stats-value">{{sections|get_items:sec|get_items:'pres'}}</h3>
+            </div>
+            <div class="sub-stats absent">
+              <p class="sub-stats-title ">Absent</p>
+              <h3 class="sub-stats-value">{{sections|get_items:sec|get_items:'abs'}}</h3>
+            </div>
+            <div class="sub-stats late">
+              <p class="sub-stats-title ">Late</p>
+              <h3 class="sub-stats-value">{{sections|get_items:sec|get_items:'late'}}</h3>
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock content %}

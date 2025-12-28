@@ -75,6 +75,20 @@ def send_otp_to_email(request,email):
 
 
 
+# Generates Attributes for Calendar Layout
+def generate_calendar(year,month):
+    cal = calendar.Calendar() # Creating the cal Object
+    month_days = cal.monthdayscalendar(year,month) # Getting the month days
+
+    calendar_attrs = {
+        'month_days':month_days, # Gives the dates of selected month to generate calendar dates
+        'month':calendar.month_name[month], # Gives month name to check in the select tag
+        'year':year,
+    }
+    return calendar_attrs
+
+
+
 
 
 #vIEW FUNCTIONS
@@ -216,7 +230,7 @@ def register(request):
 
 
 
-# Profile page
+# Profile page Views
 @login_required
 def user_profile(request,user_id):
     return render(request,'profile.html')
@@ -253,6 +267,17 @@ def update_first_and_last_name(request):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 """ 
 ===============================================
 Student Dashboard
@@ -263,7 +288,7 @@ Student Dashboard
 def student_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
-    projects=Project.objects.all().order_by('-created_at')
+    projects=Project.objects.filter(section=request.user.section).order_by('-created_at')
 
     # Count the Missed Project
     missed_projects = 0
@@ -277,15 +302,68 @@ def student_dashboard(request):
         submission_count=Submission.objects.filter(submitted_by=request.user).count()
 
     # Fetching the Project Status
-    project_status={}
-    for project in projects:
-        project_status[project.id]={"submitted":Submission.objects.filter(submitted_to=project,submitted_by=request.user).exists()}
+    project_status={} 
+
+    for pro in projects:
+        if Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists():
+            project_status[pro.id]="submitted"
+        elif not Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists() and pro.deadline >= timezone.now():
+            project_status[pro.id]="pending"
+        elif not Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists() and pro.deadline < timezone.now():
+            project_status[pro.id]="missed"    
+
     return render(request,'student_dashboard.html',{
         'projects':projects,
         "project_status":project_status,
         'submission_count':submission_count,
         'pending_projects':projects.count()-missed_projects-submission_count,
         'missed_projects':missed_projects})
+
+
+
+# Project Views
+def get_all_projects(request):
+    projects = Project.objects.filter(section=request.user.section)
+    project_status = {}
+    for pro in projects:
+        if Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists():
+            project_status[pro.id]="submitted"
+        elif not Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists() and pro.deadline >= timezone.now():
+            project_status[pro.id]="pending"
+        elif not Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists() and pro.deadline < timezone.now():
+            project_status[pro.id]="missed"
+
+    return render(request,"student_layouts/projects.html",{'projects':projects,'project_status':project_status,'filter_by':'all'})
+
+
+
+def filter_projects(request):
+    filter_by = request.GET.get('filter-by', 'all')
+    projects = Project.objects.filter(section=request.user.section)
+    project_status = {}
+    for pro in projects:
+        if Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists():
+            project_status[pro.id]="submitted"
+        elif not Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists() and pro.deadline >= timezone.now():
+            project_status[pro.id]="pending"
+        elif not Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists() and pro.deadline < timezone.now():
+            project_status[pro.id]="missed"
+
+    # Filtering Submitted Projects
+    if filter_by == "submitted":
+        # Start from Project
+        # Look for Submission objects linked to that Project
+        # From those submissions, check:
+        projects = projects.filter(submission__submitted_by=request.user)
+    
+    # Filtering Pending Projects
+    elif filter_by == "pending":
+        projects = projects.filter(deadline__gte=timezone.now()).exclude(submission__submitted_by=request.user)
+
+    # Filtering Missed Projects
+    elif filter_by == "missed":
+        projects = projects.filter(deadline__lt=timezone.now()).exclude(submission__submitted_by=request.user)
+    return render(request,"student_layouts/projects.html",{'projects':projects,'project_status':project_status,'filter_by':filter_by})
 
 
 
@@ -355,21 +433,31 @@ Coach Dashboard
 def coach_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
-    sections={}
-    for sec in User._meta.get_field("section").choices:
-        sections[sec[0]]={
-            "tot_stu":User.objects.filter(role='student',section=sec[0]).count(),
-            "pres":Attendance.objects.filter(student__section=sec[0],status='present',date=date.today()).count(),
-            "abs":Attendance.objects.filter(student__section=sec[0],status='absent',date=date.today()).count(),
-            "late":Attendance.objects.filter(student__section=sec[0],status='late',date=date.today()).count()
-            }
+    
+    # Count the attendance for today
+    attendance_for_today = {
+        'present':Attendance.objects.filter(student__section=request.user.section,status='present',date=date.today()).count(),
+        'absent':Attendance.objects.filter(student__section=request.user.section,status='absent',date=date.today()).count(),
+        'late':Attendance.objects.filter(student__section=request.user.section,status='late',date=date.today()).count()
+    }
+
     projects=Project.objects.filter(created_by=request.user)
     sub_count={}
     tot_student=User.objects.filter(role='student',section=request.user.section).count()
     for pro in projects:
         sub_count[pro.id]=Submission.objects.filter(submitted_to=pro).count()
-    return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'sections':sections})
+    return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'attendance_for_today':attendance_for_today})
 
+
+
+
+def attendance(request):
+    students = User.objects.filter(section=request.user.section,role='student').order_by('first_name')
+    today_att = {rcd.student.id:rcd.status for rcd in Attendance.objects.filter(student__section=request.user.section,date=timezone.now())}
+    if today_att == {}:
+        today_att=False
+    print(today_att)
+    return render(request,"coach_layouts/attendance.html",{'students':students,'sec':request.user.section,'today_att':today_att})
 
 
 
@@ -379,22 +467,24 @@ def attendance_report(request):
     month = int(request.GET.get("month", date.today().month))
     student = int(request.GET.get("student", User.objects.filter(section=request.user.section,role='student').order_by('first_name').first().id))
 
+    # Genarating the calendar
+    calendar_attrs = generate_calendar(year,month)
+
     # Getting the attendance for selected month and year for selected student 
-    attendance_rcd = Attendance.objects.filter(student_id=student,
-                                               date__year=year,
-                                               date__month=month)
+    attendance_records = Attendance.objects.filter(student_id=student,date__year=year,date__month=month)
     # Mapping the date and attendance eg:{31:present,...}
-    attendance_map = {rcd.date.day:rcd.status for rcd in attendance_rcd}
+    attendance_map = {rcd.date.day:rcd.status for rcd in attendance_records}
+    attendance = 0
+    if attendance_records.count() != 0:
+        attendance = math.floor((attendance_records.filter(status='present').count()/attendance_records.count())*100)
 
     att_summary = {
-        'present':attendance_rcd.filter(status='present').count(),
-        'absent':attendance_rcd.filter(status='absent').count(),
-        'late':attendance_rcd.filter(status='late').count(),
-        'attendance':math.floor((attendance_rcd.filter(status='present').count()/calendar.monthrange(year,month)[1])*100)
+        'present':attendance_records.filter(status='present').count(),
+        'absent':attendance_records.filter(status='absent').count(),
+        'late':attendance_records.filter(status='late').count(),
+        'attendance':attendance
     }
-    cal = calendar.Calendar() # Creating the cal Object
-    month_days = cal.monthdayscalendar(year,month) # Getting the month days
-    # Hardcoded data
+    # Hardcoded data of month and year
     years = [2023,2024,2025,2026]
     months = {
     1: "January", 2: "February", 3: "March", 4: "April",
@@ -404,14 +494,12 @@ def attendance_report(request):
     
     students = User.objects.filter(section=request.user.section,role='student').order_by('first_name')
     return render(request,"coach_layouts/attendance_report.html",{
+        'calendar_attrs':calendar_attrs,
         'months':months, # Gives the list of months to show in the select tag's option
         'years':years, # Gives the list of years to show in the select tag's option
         'students':students, # Gives the list of students to show in the select tag's option
         'attendance_map':attendance_map, # Mapped attendance date to mark calendar
-        'month_days':month_days, # Gives the dates of selected month to generate calendar dates
         'student':User.objects.get(id=student), # Gives the student name to check in select tag
-        'month_name':calendar.month_name[month], # Gives month name to check in the select tag
-        'year':year,
         'att_summary':att_summary}) # Gives the year to check in the select tag
 
 
@@ -447,13 +535,6 @@ def save_feedback(request,sub_id):
 
 
 
-def get_sec_students(request,sec):
-    students=User.objects.filter(section=sec,role="student").order_by("username")
-    today_att={i.student.id:i.status for i in Attendance.objects.filter(student__section=sec,date=date.today())}
-    if today_att == {}: 
-        today_att=False
-    return render(request,"coach_layouts/section.html",{"students":students,"sec":sec,"today_att":today_att})
-
 
 def save_attendance(request,sec):
     students=User.objects.filter(section=sec,role="student").order_by("username")
@@ -482,7 +563,7 @@ def create_project(request):
             if data['file_path']=="":
                 del data['file_path']
             del data['action']
-            Project.objects.create(created_by=request.user,**data)
+            Project.objects.create(created_by=request.user,section=request.user.section,**data)
             messages.success(request,"Your Project Created Successfully")
             return redirect('/dashboard/coach/')
         if data['action']=='save':
@@ -536,7 +617,7 @@ def edit_or_delete_project(request,project_id):
 def admin_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
-    
+
     app_config=apps.get_app_config('submittly')
     app_models=app_config.get_models()
 
@@ -550,6 +631,28 @@ def admin_dashboard(request):
 
     return render(request,'admin_dashboard.html',{'models':model_list})
 
+
+
+def all_sections(request):
+    sections={}
+    for sec in User._meta.get_field("section").choices:
+        sections[sec[0]]={
+            "tot_stu":User.objects.filter(role='student',section=sec[0]).count(),
+            "pres":Attendance.objects.filter(student__section=sec[0],status='present',date=date.today()).count(),
+            "abs":Attendance.objects.filter(student__section=sec[0],status='absent',date=date.today()).count(),
+            "late":Attendance.objects.filter(student__section=sec[0],status='late',date=date.today()).count()
+            }
+    return render(request,"admin_layouts/all_sections.html",{'sections':sections})
+
+
+
+
+def get_sec_students(request,sec):
+    students=User.objects.filter(section=sec,role="student").order_by("username")
+    today_att={i.student.id:i.status for i in Attendance.objects.filter(student__section=sec,date=date.today())}
+    if today_att == {}: 
+        today_att=False
+    return render(request,"admin_layouts/section.html",{"students":students,"sec":sec,"today_att":today_att})
 
 
 

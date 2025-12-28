@@ -10,7 +10,11 @@ def getFilePath(instance,filename):
     return f"profile_images/{instance.username}{extension}"
 
 
-
+SECTION_CHOICE=[
+        ("A","A"),
+        ("B","B"),
+        ("C","C")
+    ]
 # Create your models here.
 
 class User(AbstractUser):
@@ -19,11 +23,7 @@ class User(AbstractUser):
         ("coach","Coach"),
         ("admin","Admin")
     ]
-    SECTION_CHOICE=[
-        ("A","A"),
-        ("B","B"),
-        ("C","C")
-    ]
+    
     role=models.CharField(max_length=15,choices=ROLE_CHOICES)
     section=models.CharField(max_length=1,choices=SECTION_CHOICE,blank=True,null=True)
     profile_image=models.ImageField(upload_to=getFilePath,blank=True,null=True)
@@ -35,6 +35,7 @@ class Project(models.Model):
     document_link=models.URLField(blank=True)
     created_by=models.ForeignKey(User,on_delete=models.CASCADE,limit_choices_to={'role':'coach'})
     created_at=models.DateTimeField(default=timezone.now)
+    section = models.CharField(max_length=5,choices=SECTION_CHOICE,null=True)
 
     def __str__(self):
         return self.title

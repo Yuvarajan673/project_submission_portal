@@ -602,17 +602,16 @@ main{
    SECTIONS & ANIMATIONS
 ========================================================= */
 .sec{
-    animation: slideIn .5s forwards;
-    transform-origin: top;
+    animation: slideIn .5s linear;
 }
 @keyframes slideIn {
     from {
         opacity: 0;
-        transform: scale(0.5);
+        
     }
     to {
         opacity: 1;
-        transform: scale(1);
+        
     }
 }
 
@@ -822,6 +821,10 @@ tr:has(td:hover){
     padding: 20px 0;
     position: relative;
 }
+.no-projects-div{
+    text-align: center;
+    line-height: 400px;
+}
 .badge{
     position: absolute;
     padding: 2px 8px;
@@ -834,11 +837,14 @@ tr:has(td:hover){
     color: var(--white);
     font-size: small;
 }
-.badge-grn{
+.badge-submitted{
     background-color: #00b006;
 }
-.badge-org{
+.badge-pending{
     background-color: #f97316;
+}
+.badge-missed{
+    background-color: #ff0000;
 }
 .card{
     padding: 25px;
@@ -900,6 +906,10 @@ tr:has(td:hover){
 .student-table tr{
     height: 56px;
 }
+.no-attendace-div{
+    text-align: center;
+    padding: 15px;
+}
 .mark-attendance-col,
 .mark-attendance-data,
 #attendance-save-btn,
@@ -940,11 +950,9 @@ input.late:checked + .for-late{
     padding: 30px 0; 
 }
 .first-row{
-    display: flex;
-    justify-content: space-between;
-    white-space: wrap;
-    flex-wrap: wrap;
-    gap: 40px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
 }
 .second-row{
     display: flex;
@@ -960,7 +968,6 @@ input.late:checked + .for-late{
     border-radius: 10px;
     background-color: var(--white);
     flex-grow: 1;
-    width: 200px;
 
     transition: transform .2s;
 }
@@ -1439,9 +1446,12 @@ input.late:checked + .for-late{
 /* Calendar Fetch Form */
 .calendar-fetch-form{
     padding: unset;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 .year-month-select-group-div{
     display: flex;
+    flex-wrap: wrap;
     gap: 20px;
 }
 /* .calendar-fetch-form select{
@@ -1472,9 +1482,11 @@ input.late:checked + .for-late{
     padding: 10px;
     border: 1.5px solid var(--grey);
     cursor: pointer;
+    transition: border .2s, background-color .2s;
 }
 .select:hover{
-    background-color: #0000000f;
+    border: 1.5px solid var(--purple);
+    background-color: #00000009;
 }
 .select:focus-within{
     border: 1.5px solid var(--purple);
@@ -1492,12 +1504,23 @@ input.late:checked + .for-late{
   border: 1.5px solid var(--grey);
 }
 
+
+.calendar-fetch-form select::picker-icon{
+    content: "\2335";
+    font-weight: bolder;
+}
+
+
 /* This styles for each options */
 .calendar-fetch-form option{
     padding: 5px 10px;
     border-radius: 5px;
     margin: 5px;
     cursor: pointer;
+    transition: background-color .2s;
+}
+.calendar-fetch-form option:hover{
+    background-color: #00000011;    
 }
 /* This apply the checkmark for the selected option */
 .calendar-fetch-form option::checkmark{  
@@ -1572,7 +1595,7 @@ input.late:checked + .for-late{
     transition: transform .2s;
 }
 .calendar-dates-div div:hover{
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
 
@@ -1592,6 +1615,44 @@ input.late:checked + .for-late{
     background-color: #ffd00034;
     color: #f97316;
 }
+
+
+
+
+
+/* =========================================================
+   All Projects Page
+========================================================= */
+.projects-filter-bar{
+    padding: 10px;
+}
+.projects-filter-form{
+    display: flex;
+    gap: 30px;
+}
+.projects-filter-label{
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color .2s;
+}
+.projects-filter-label:hover{
+    background-color: #00000011;
+}
+.projects-filter-label:has(.projects-filter:checked){
+    background-color: var(--purple);
+    color: var(--white);
+}
+.projects-filter{
+    display: none;
+}
+
+
+
+
+
+
+
 
 
 /* =========================================================

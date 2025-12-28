@@ -1,0 +1,72 @@
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
+{% block title %}Attendance | Submittly{% endblock title %}
+{% block content %}
+
+<section class="attendance-section dashboard">
+    <div class="action-bar sec">
+        <h2>Section {{sec}}</h2>
+        {% if not today_att %}
+        <div class="confirm-btns">
+            <a><button class="other-btn" id="attendance-btn" onclick="showAttendance('.mark-attendance-col','.mark-attendance-data','#attendance-btn','#attendance-save-btn','.confirm-btns')"><span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 18 18"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m5.525 16.175l3.55-3.55q.3-.3.7-.288t.7.313q.275.3.275.7t-.275.7L6.25 18.3q-.3.3-.7.3t-.7-.3L2.7 16.15q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275zm0-8l3.55-3.55q.3-.3.7-.288t.7.313q.275.3.275.7t-.275.7L6.25 10.3q-.3.3-.7.3t-.7-.3L2.7 8.15q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275zM14 17q-.425 0-.712-.288T13 16t.288-.712T14 15h7q.425 0 .713.288T22 16t-.288.713T21 17zm0-8q-.425 0-.712-.288T13 8t.288-.712T14 7h7q.425 0 .713.288T22 8t-.288.713T21 9z"/></svg>&nbsp; Mark Attendece</span></button></a>
+            <a><button class="other-btn" id="attendance-save-btn" onclick="submitAttForm('#attendance-form')"><span><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 18 18"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m5.525 16.175l3.55-3.55q.3-.3.7-.288t.7.313q.275.3.275.7t-.275.7L6.25 18.3q-.3.3-.7.3t-.7-.3L2.7 16.15q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275zm0-8l3.55-3.55q.3-.3.7-.288t.7.313q.275.3.275.7t-.275.7L6.25 10.3q-.3.3-.7.3t-.7-.3L2.7 8.15q-.275-.275-.275-.7t.275-.7t.7-.275t.7.275zM14 17q-.425 0-.712-.288T13 16t.288-.712T14 15h7q.425 0 .713.288T22 16t-.288.713T21 17zm0-8q-.425 0-.712-.288T13 8t.288-.712T14 7h7q.425 0 .713.288T22 8t-.288.713T21 9z"/></svg>&nbsp; Save</span></button></a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="table-layout sec student-table">
+        <form id="attendance-form" action="{% url 'save_attendance' sec %}" method="post">
+            {% csrf_token %}
+            <table>
+              <thead>
+                <tr>
+                  <th>S.No</th>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Section</th>
+                  {% if today_att %}
+                  <th>Today's Attendance</th>
+                  {% else %}
+                  <th class="mark-attendance-col">P/A/L</th>
+                  {% endif %}
+                </tr>
+              </thead>
+              <tbody class="sec">
+                  {% for student in students %}
+                  <tr>
+                      <td>{{forloop.counter}}</td>
+                      <td>{{student.first_name|capfirst}}</td>
+                      <td>{{student.last_name|capfirst}}</td>
+                      <td>{{student.section}}</td>
+                      {% if today_att %}
+                        {% if today_att|get_items:student.id == 'present' %}
+                            <td class="PorAorL"><svg class="for-present" style="color: #00b006;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 0 28 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg></td>
+                        {% elif today_att|get_items:student.id == 'absent' %}
+                            <td class="PorAorL"><svg class="for-absent" style="color: #ff0000;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 0 28 24"><!-- Icon from Mage Icons by MageIcons - https://github.com/Mage-Icons/mage-icons/blob/main/License.txt --><path fill="currentColor" d="M15.25 2h-6.5A6.76 6.76 0 0 0 2 8.75v6.5A6.76 6.76 0 0 0 8.75 22h6.5A6.76 6.76 0 0 0 22 15.25v-6.5A6.76 6.76 0 0 0 15.25 2m1.31 13.15a1 1 0 0 1 0 1.41a1 1 0 0 1-1.41 0L12 13.41l-3.15 3.15a1 1 0 0 1-1.41 0a1 1 0 0 1 0-1.41L10.59 12L7.44 8.85a1 1 0 1 1 1.41-1.41L12 10.59l3.15-3.15a1 1 0 1 1 1.41 1.41L13.41 12z"/></svg></td>
+                        {% elif today_att|get_items:student.id == 'late' %}
+                            <td class="PorAorL"><svg class="for-late" style="color: #ff8000;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 -0 28 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M12 17q.425 0 .713-.288T13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17m-1-4h2V7h-2zm-6 8q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h4.2q.325-.9 1.088-1.45T12 1t1.713.55T14.8 3H19q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm7-16.75q.325 0 .538-.213t.212-.537t-.213-.537T12 2.75t-.537.213t-.213.537t.213.538t.537.212"/></svg></td>
+                        {% endif %}
+                      {% else %}
+                      <td class="mark-attendance-data">
+                        <label for="present-{{forloop.counter}}" class="radio-label">
+                            <input type="radio" name="{{student.id}}" value="present" id="present-{{forloop.counter}}" class="radio-btn present" checked>
+                            <svg class="for-present" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 0 28 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m10.6 13.8l-2.15-2.15q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7L9.9 15.9q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM12 22q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22"/></svg>
+                        </label> 
+                        <label for="absent-{{forloop.counter}}" class="radio-label">
+                            <input type="radio" name="{{student.id}}" value="absent" id="absent-{{forloop.counter}}" class="radio-btn absent">
+                            <svg class="for-absent" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 0 28 24"><!-- Icon from Mage Icons by MageIcons - https://github.com/Mage-Icons/mage-icons/blob/main/License.txt --><path fill="currentColor" d="M15.25 2h-6.5A6.76 6.76 0 0 0 2 8.75v6.5A6.76 6.76 0 0 0 8.75 22h6.5A6.76 6.76 0 0 0 22 15.25v-6.5A6.76 6.76 0 0 0 15.25 2m1.31 13.15a1 1 0 0 1 0 1.41a1 1 0 0 1-1.41 0L12 13.41l-3.15 3.15a1 1 0 0 1-1.41 0a1 1 0 0 1 0-1.41L10.59 12L7.44 8.85a1 1 0 1 1 1.41-1.41L12 10.59l3.15-3.15a1 1 0 1 1 1.41 1.41L13.41 12z"/></svg>
+                        </label>
+                        <label for="late-{{forloop.counter}}" class="radio-label">
+                            <input type="radio" name="{{student.id}}" value="late" id="late-{{forloop.counter}}" class="radio-btn late">
+                            <svg class="for-late" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="-2 -0 28 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="M12 17q.425 0 .713-.288T13 16t-.288-.712T12 15t-.712.288T11 16t.288.713T12 17m-1-4h2V7h-2zm-6 8q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h4.2q.325-.9 1.088-1.45T12 1t1.713.55T14.8 3H19q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm7-16.75q.325 0 .538-.213t.212-.537t-.213-.537T12 2.75t-.537.213t-.213.537t.213.538t.537.212"/></svg>
+                        </label>
+                      </td>
+                      {% endif %}
+                  </tr>
+                  {% endfor %}
+              </tbody>
+            </table>
+        </form>
+    </div>
+</section>
+
+{% endblock content %}

@@ -182,6 +182,3 @@ if(imagePlaceholder,imgInput,profileText){
     })
 }
 
-
-
-console.log(USER_ID)

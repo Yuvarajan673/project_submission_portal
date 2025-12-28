@@ -27,6 +27,11 @@ urlpatterns=[
 
 
 
+    path('all/projects/',views.get_all_projects,name='get_all_projects'),
+    path('all/projects/filter/',views.filter_projects,name='filter_projects'),
+
+
+
     # Student Dashboard Routes
     path('dashboard/student/',views.student_dashboard,name='student_dashboard'),
     path('project/details/<int:project_id>',views.project_details,name='project_details'),
@@ -37,6 +42,7 @@ urlpatterns=[
 
     # Coach Dashboard Routes
     path('dashboard/coach/',views.coach_dashboard,name='coach_dashboard'),
+    path('dashboard/coach/attendance/',views.attendance,name='attendance'),
     path('dashboard/coach/attendance/report',views.attendance_report,name='attendance_report'),
     path('create/project/',views.create_project,name='create_project'),
     path('section/<str:sec>/students/',views.get_sec_students,name='get_sec_students'),
@@ -58,6 +64,7 @@ urlpatterns=[
 
     # Admin Dashboard Routes
     path('dashboard/admin/',views.admin_dashboard,name='admin_dashboard'),
+    path('dashboard/admin/all/sections/',views.all_sections,name='all_sections'),
     path('table_filter/<str:mod_name>/',views.table_filter,name='table_filter'),
     path('add_user/<str:mod_name>/',views.add_user,name='add_user'),
     path('adminform/<int:id>/<str:mod_name>/',views.adminform,name='adminform'),
