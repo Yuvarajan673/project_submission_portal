@@ -116,8 +116,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Email settings (use your Gmail or any SMTP)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.pythonanywhere.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+EMAIL_PORT = 25
+
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
 EMAIL_HOST_USER = 'yuvarajan'
 EMAIL_HOST_PASSWORD = 'Syuvarajan353@'
 DEFAULT_FROM_EMAIL = 'yuvarajan@pythonanywhere.com'
