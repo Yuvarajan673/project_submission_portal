@@ -3,58 +3,59 @@
 
 {% block content %} 
 
-<!--Hero Section-->
-<section class="hero-section">
-    <div class="sec main-div">
-        <h1 class="sec">Welcome to Submittly</h1>
-        <p class="sec">The simplest way for students to submit projects <br> and for coaches to review them easily.</p>
-    </div>
-    <div class="sec get-started-div">
-        <h2>Your Projects, <span class="highlight">Perfectly Organized</span></h2>
-        <p>Start submitting with ease today — where students and coaches stay connected effortlessly.</p>
-    </div>
-    <a href="{% url 'send_otp' %}"><button class="sec get-started-btn other-btn"><span><i class="fa-solid fa-rocket"></i>&nbsp;&nbsp; Get Started</span></button></a>
+<section class="home-page-section">
+    <!--Hero Section-->
+    <section class="hero-section">
+        <div class="sec main-div">
+            <h1 class="sec">Welcome to Submittly</h1>
+            <p class="sec">The simplest way for students to submit projects <br> and for coaches to review them easily.</p>
+        </div>
+        <div class="sec get-started-div">
+            <h2>Your Projects, <span class="highlight">Perfectly Organized</span></h2>
+            <p>Start submitting with ease today — where students and coaches stay connected effortlessly.</p>
+        </div>
+        <a href="{% url 'send_otp' %}"><button class="sec get-started-btn other-btn"><span><i class="fa-solid fa-rocket"></i>&nbsp;&nbsp; Get Started</span></button></a>
+    </section>
+
+
+    <!--How It Work Section-->
+    <section class="sec how-it-works">
+        <h2>How It Works</h2>
+        <div class="sec step-list">
+            <div class="step">
+                <h3><i class="fa-solid fa-check-circle"></i>&nbsp; Submit</h3>
+                <p>Students upload their project files with just a few clicks.</p>
+            </div>
+            <div class="sec step">
+                <h3><i class="fa-solid fa-magnifying-glass"></i>&nbsp; Review</h3>
+                <p>Coaches can easily review all submissions in one place.</p>
+            </div>
+            <div class="sec step">
+                <h3><i class="fa-solid fa-comment-dots"></i>&nbsp; Feedback</h3>
+                <p>Get grades and comments instantly to improve your work.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <!--Features section-->
+    <section class="sec feature-section">
+        <h2>Why Choose Submittly?</h2>
+        <div class="sec feature-list">
+            <div class="feature">
+                <h3><i class="fa-solid fa-clock"></i>&nbsp; Deadline Tracking</h3>
+                <p>Stay ahead with clear submission timelines.</p>
+            </div>
+            <div class="sec feature">
+                <h3><i class="fa-solid fa-upload"></i>&nbsp; Easy File Upload</h3>
+                <p>Upload projects in any format securely.</p>
+            </div>
+            <div class="sec feature">
+                <h3><i class="fa-solid fa-comment-dots"></i>&nbsp; Feedback System</h3>
+                <p>Coaches can leave notes and grades directly on submissions.</p>
+            </div>
+        </div>
+    </section>
 </section>
-
-
-<!--How It Work Section-->
-<section class="sec how-it-works">
-    <h2>How It Works</h2>
-    <div class="sec step-list">
-        <div class="step">
-            <h3><i class="fa-solid fa-check-circle"></i>&nbsp; Submit</h3>
-            <p>Students upload their project files with just a few clicks.</p>
-        </div>
-        <div class="sec step">
-            <h3><i class="fa-solid fa-magnifying-glass"></i>&nbsp; Review</h3>
-            <p>Coaches can easily review all submissions in one place.</p>
-        </div>
-        <div class="sec step">
-            <h3><i class="fa-solid fa-comment-dots"></i>&nbsp; Feedback</h3>
-            <p>Get grades and comments instantly to improve your work.</p>
-        </div>
-    </div>
-</section>
-
-
-<!--Features section-->
-<section class="sec feature-section">
-    <h2>Why Choose Submittly?</h2>
-    <div class="sec feature-list">
-        <div class="feature">
-            <h3><i class="fa-solid fa-clock"></i>&nbsp; Deadline Tracking</h3>
-            <p>Stay ahead with clear submission timelines.</p>
-        </div>
-        <div class="sec feature">
-            <h3><i class="fa-solid fa-upload"></i>&nbsp; Easy File Upload</h3>
-            <p>Upload projects in any format securely.</p>
-        </div>
-        <div class="sec feature">
-            <h3><i class="fa-solid fa-comment-dots"></i>&nbsp; Feedback System</h3>
-            <p>Coaches can leave notes and grades directly on submissions.</p>
-        </div>
-    </div>
-</section>
-
 
 {% endblock content %}

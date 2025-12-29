@@ -357,11 +357,11 @@ def filter_projects(request):
         projects = projects.filter(submission__submitted_by=request.user)
     
     # Filtering Pending Projects
-    elif filter_by == "pending":
+    elif filter_by == "pending":   # gte = Greater Than or Equal
         projects = projects.filter(deadline__gte=timezone.now()).exclude(submission__submitted_by=request.user)
 
     # Filtering Missed Projects
-    elif filter_by == "missed":
+    elif filter_by == "missed":    # lt = Less Than
         projects = projects.filter(deadline__lt=timezone.now()).exclude(submission__submitted_by=request.user)
     return render(request,"student_layouts/projects.html",{'projects':projects,'project_status':project_status,'filter_by':filter_by})
 
@@ -372,8 +372,8 @@ def project_details(request,project_id):
     feedbacks=None
     reviewed=False
     if Submission.objects.filter(submitted_by=request.user,submitted_to=project_id).exists():
-        feedbacks=Feedback.objects.filter(submission_id=Submission.objects.get(submitted_by=request.user,submitted_to=project_id))
-        submission=Submission.objects.get(submitted_by=request.user,submitted_to=project_id)
+        feedbacks=Feedback.objects.filter(submission_id=Submission.objects.filter(submitted_by=request.user,submitted_to=project_id).first())
+        submission=Submission.objects.filter(submitted_by=request.user,submitted_to=project_id).first()
         if submission.grade != None or submission.status != 'pending review':
             reviewed=True
     answer_submitted=False
@@ -434,6 +434,8 @@ def coach_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
     
+    
+
     # Count the attendance for today
     attendance_for_today = {
         'present':Attendance.objects.filter(student__section=request.user.section,status='present',date=date.today()).count(),
@@ -442,11 +444,16 @@ def coach_dashboard(request):
     }
 
     projects=Project.objects.filter(created_by=request.user)
+    # Project Status
+    project_status=[]
+    for pro in projects:
+        if not Submission.objects.filter(submitted_to=pro.id).exists():
+            project_status.append(pro.id)
     sub_count={}
     tot_student=User.objects.filter(role='student',section=request.user.section).count()
     for pro in projects:
         sub_count[pro.id]=Submission.objects.filter(submitted_to=pro).count()
-    return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'attendance_for_today':attendance_for_today})
+    return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'attendance_for_today':attendance_for_today,'project_status':project_status})
 
 
 
