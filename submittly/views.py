@@ -68,7 +68,7 @@ def send_otp_to_email(request,email):
     request.session['otp_created_time']=time.time()
     subject= "Verify Your Email Address"
     message=f"Use the verification code below to complete your registration.\n\n {otp} \n\n It will expire in 5 minutes."
-    from_email="submittly.noreply@gmail.com"
+    from_email="yuvarajan@pythonanywhere.com"
     send_mail(subject,message,from_email,[email])
 
 
