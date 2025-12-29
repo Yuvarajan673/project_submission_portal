@@ -120,7 +120,7 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'yuvarajan'
 EMAIL_HOST_PASSWORD = 'Syuvarajan353@'
-DEFAULT_FROM_EMAIL = 'submittly.noreply@gmail.com'
+DEFAULT_FROM_EMAIL = 'yuvarajan@pythonanywhere.com'
 # EMAIL_HOST_USER = 'submittly.noreply@gmail.com' 
 # EMAIL_HOST_PASSWORD = 'faed nxmg fwjp teeb'    # app password (not your Gmail password)
 
