@@ -249,15 +249,6 @@ main{
     width: 100%;
     border:  1.5px solid var(--purple);
 }
-.select-field{
-    outline: none;
-    font-size: medium;
-    padding: 9.5px;
-    width: 100%;
-    appearance: none;
-    border: 1.5px solid var(--purple);
-    background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAVklEQVR4nGNgGAWjYBQMGIhhYGD4wcDA8J9IDFIbRYoF8SQY/h+K40j1RTkJhteTajgpltSTazgxltRTajg+S6hmODZLqG44DCQxMDAkwnmjYBQMDwAAptU8wdV6fT0AAAAASUVORK5CYII=') no-repeat center right 10px;
-}
 
 /* input validation styling */
 .form-fields:valid{
@@ -1293,6 +1284,9 @@ input.late:checked + .for-late{
 
 /* profile image model */
 .modal-backdrop{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     left: 0;
     top: 0;
@@ -1301,17 +1295,14 @@ input.late:checked + .for-late{
     z-index: 10;
     visibility: hidden;
     cursor: default;
-    background-color: #00000033;
-    transition: backdrop-filter .3s, visibility .3s;
+    transition: backdrop-filter .3s, visibility .3s, background-color .3s;
 }
 .modal{
     position: absolute;
-    top: 50%;
-    left: 50%;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 4px #00000042;
-    transform: translate(-50%,-50%) scale(0.9);
+    transform: scale(0.9);
     opacity: 0;
     background-color: var(--white);
     transition: transform .3s cubic-bezier(0.33, 0.23, 0.63, 1.52) , opacity .2s ease;
@@ -1324,10 +1315,11 @@ input.late:checked + .for-late{
 /* Animating the Modal */
 .modal-backdrop:target{
     visibility: visible;
+    background-color: #00000033;
     backdrop-filter: blur(5px);
 }
 .modal-backdrop:target > .modal{
-    transform: translate(-50%,-50%) scale(1);
+    transform: scale(1);
     opacity: 1;
 }
 
@@ -1356,7 +1348,14 @@ input.late:checked + .for-late{
     text-align: center;
 }
 
+
+
 /* Modal Body */
+.modal-body{
+    max-height: 630px;
+    scrollbar-width: thin;
+    overflow-y: auto;
+}
 .profile-image-update-form{
     display: flex;
     flex-direction: column;
@@ -1395,7 +1394,8 @@ input.late:checked + .for-late{
 
 
 /* Firstname Lastname edit modal */
-.firstname-lastname-modal{
+.firstname-lastname-modal,
+.create-project-modal{
     width: 400px;
 }
 /* Firstname Lastname form */
@@ -1405,9 +1405,9 @@ input.late:checked + .for-late{
     align-content: center;
     gap: 20px;
     width: 350px;
-    height: 190px;
-    margin: auto;
-    margin-top: 30px;
+    height: auto;
+    margin-inline: auto;
+    padding: 30px 0 15px 0;
 }
 .form-field-div{
     display: flex;
@@ -1418,21 +1418,118 @@ input.late:checked + .for-late{
     overflow: hidden;
     transition: border .2s;
 }
+.form-field-div:has(.form-field:focus-within){
+    border: 1.8px solid var(--purple);
+}
+.form-field-div:has(.form-field:valid){
+    border: 1.8px solid var(--ico-green);
+}
 .form-field-div > svg{
     color: var(--grey);
 }
 .form-field{
     padding: 10px 5px;
-    font-size: larger;
+    font-size: 16px;
+    color: rgb(74 74 74);
     width: 100%;
     border: none;
     outline: none;
 }
-.form-field-div:has(.form-field:focus-within){
-    border: 1.5px solid var(--purple);
+
+
+/* Check Box Styling */
+.checkbox-field-div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: grey;
+}
+.checkbox-field-div label{
+    cursor: pointer;
+}
+.checkbox-field{
+    height: 16px;
+    width: 16px;
+    accent-color: var(--purple);
 }
 
 
+/* Textarea Styling */
+.textarea-field{
+    resize: vertical;
+    max-height: 300px;
+}
+.textarea-field-div > svg{
+    align-self: flex-start;
+    margin-top: 8px;
+} 
+
+
+
+/* Change the default style into new = */
+select,
+::picker(select) {
+  appearance: base-select;
+}
+
+.select-field:hover,
+.select-field.active{
+    background-color: unset;
+}
+
+/* This CSS selector selects the dropdown list */
+::picker(select) {
+  border-radius: 8px;
+  border: 1.5px solid var(--grey);
+}
+
+
+select::picker-icon{
+    content: "\2335";
+    font-weight: bolder;
+}
+
+
+/* This styles for each options */
+option{
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: background-color .2s;
+}
+option:hover{
+    background-color: #00000011;    
+}
+/* This apply the checkmark for the selected option */
+option::checkmark{  
+    content: "✔";
+}
+ /* This selector apply style for the selected option */
+option:checked{
+    background-color: var(--purple);
+    color: var(--white);
+}
+
+
+
+/* Datetime Styling */
+.datetime-field{
+    position: relative;
+}
+.datetime-field::-webkit-clear-button{
+    display: none;
+}
+.datetime-field::-webkit-calendar-picker-indicator{
+    background-color: var(--purple);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
 
 
 
@@ -1488,46 +1585,6 @@ input.late:checked + .for-late{
 }
 .select:focus-within{
     border: 1.5px solid var(--purple);
-}
-
-/* Change the default style into new = */
-.calendar-fetch-form select,
-.calendar-fetch-form ::picker(select) {
-  appearance: base-select;
-}
-
-/* This CSS selector selects the dropdown list */
-.calendar-fetch-form ::picker(select) {
-  border-radius: 8px;
-  border: 1.5px solid var(--grey);
-}
-
-
-.calendar-fetch-form select::picker-icon{
-    content: "\2335";
-    font-weight: bolder;
-}
-
-
-/* This styles for each options */
-.calendar-fetch-form option{
-    padding: 5px 10px;
-    border-radius: 5px;
-    margin: 5px;
-    cursor: pointer;
-    transition: background-color .2s;
-}
-.calendar-fetch-form option:hover{
-    background-color: #00000011;    
-}
-/* This apply the checkmark for the selected option */
-.calendar-fetch-form option::checkmark{  
-    content: "✔";
-}
- /* This selector apply style for the selected option */
-.calendar-fetch-form option:checked{
-    background-color: var(--purple);
-    color: var(--white);
 }
 .calendar-today-btn{
     width: 150px;

@@ -19,7 +19,7 @@ urlpatterns=[
 
 
     # Profile
-    path('user/profile/<int:user_id>/',views.user_profile,name='user_profile'),
+    path('user/profile/',views.user_profile,name='user_profile'),
     path('user/profile/upload/profile/image/',views.upload_profile_image,name='upload_profile_image'),
     path('user/profile/remove/profile/image/',views.remove_profile_image,name='remove_profile_image'),
     path('user/profile/update/name/',views.update_first_and_last_name,name='update_first_and_last_name'),
@@ -45,13 +45,14 @@ urlpatterns=[
     path('dashboard/coach/attendance/',views.attendance,name='attendance'),
     path('dashboard/coach/attendance/report',views.attendance_report,name='attendance_report'),
     path('create/project/',views.create_project,name='create_project'),
+    path('update/project/<int:project_id>',views.update_project,name='update_project'),
     path('section/<str:sec>/students/',views.get_sec_students,name='get_sec_students'),
     path('attendance/save/<str:sec>/',views.save_attendance,name='save_attendance'),
     path('view/submissions/<int:project_id>/',views.view_submissions,name='view_submissions'),
     path('submission/details/<int:sub_id>/',views.submission_details,name='submission_details'),
     path('grade/save/<int:sub_id>/',views.save_grade,name='save_grade'),
     path('feedback/save/<int:sub_id>/',views.save_feedback,name='save_feedback'),
-    path('edit/project/<int:project_id>/',views.edit_project,name='edit_project'), 
+    # path('edit/project/<int:project_id>/',views.edit_project,name='edit_project'), 
     path('delete/project/<int:project_id>/',views.delete_project,name='delete_project'), 
    
     

@@ -68,7 +68,7 @@ def send_otp_to_email(request,email):
     request.session['otp_created_time']=time.time()
     subject= "Verify Your Email Address"
     message=f"Use the verification code below to complete your registration.\n\n {otp} \n\n It will expire in 5 minutes."
-    from_email="yuvarajan@pythonanywhere.com"
+    from_email="submittly.noreply@gmail.com"
     send_mail(subject,message,from_email,[email])
 
 
@@ -232,7 +232,7 @@ def register(request):
 
 # Profile page Views
 @login_required
-def user_profile(request,user_id):
+def user_profile(request):
     return render(request,'profile.html')
 
 
@@ -259,7 +259,7 @@ def remove_profile_image(request):
 
 def update_first_and_last_name(request):
     if request.method == 'POST':
-        data = {key:value for key,value in request.POST.items() if key != 'csrfmiddlewaretoken'}
+        data = {key:value.strip().lower() for key,value in request.POST.items() if key != 'csrfmiddlewaretoken'}
         User.objects.filter(id=request.user.id).update(**data)
         messages.success(request,"Profile Name Updated Successfully")
     return redirect(f"{request.META['HTTP_REFERER']}")
@@ -288,7 +288,7 @@ Student Dashboard
 def student_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
-    projects=Project.objects.filter(section=request.user.section).order_by('-created_at')
+    projects=Project.objects.filter(section__in=[request.user.section,'all']).order_by('-created_at')
 
     # Count the Missed Project
     missed_projects = 0
@@ -323,7 +323,7 @@ def student_dashboard(request):
 
 # Project Views
 def get_all_projects(request):
-    projects = Project.objects.filter(section=request.user.section)
+    projects = Project.objects.filter(section__in=[request.user.section,'all'])
     project_status = {}
     for pro in projects:
         if Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists():
@@ -339,7 +339,7 @@ def get_all_projects(request):
 
 def filter_projects(request):
     filter_by = request.GET.get('filter-by', 'all')
-    projects = Project.objects.filter(section=request.user.section)
+    projects = Project.objects.filter(section__in=[request.user.section,'all'])
     project_status = {}
     for pro in projects:
         if Submission.objects.filter(submitted_by=request.user,submitted_to=pro).exists():
@@ -434,7 +434,12 @@ def coach_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
     
-    
+    # Edit Project
+    project_id=request.GET.get('project-id', None)
+    project=None
+    if project_id:
+        project=Project.objects.get(id=project_id)
+        project.deadline=datetime.strftime(project.deadline,'%Y-%m-%dT%H:%M')
 
     # Count the attendance for today
     attendance_for_today = {
@@ -444,16 +449,13 @@ def coach_dashboard(request):
     }
 
     projects=Project.objects.filter(created_by=request.user)
-    # Project Status
-    project_status=[]
-    for pro in projects:
-        if not Submission.objects.filter(submitted_to=pro.id).exists():
-            project_status.append(pro.id)
+
+
     sub_count={}
     tot_student=User.objects.filter(role='student',section=request.user.section).count()
     for pro in projects:
         sub_count[pro.id]=Submission.objects.filter(submitted_to=pro).count()
-    return render(request,'coach_dashboard.html',{'projects':projects,'sub_count':sub_count,'tot_student':tot_student,'attendance_for_today':attendance_for_today,'project_status':project_status})
+    return render(request,'coach_dashboard.html',{'projects':projects,'project':project,'sub_count':sub_count,'tot_student':tot_student,'attendance_for_today':attendance_for_today})
 
 
 
@@ -564,35 +566,43 @@ def save_attendance(request,sec):
 def create_project(request):
     if request.method=='POST':
         data={key:val for key,val in request.POST.items() if key != 'csrfmiddlewaretoken'}
-        if data['action']=='cancel':
-            return redirect('/dashboard/coach/')
-        if data['action']=='createproject':
-            if data['file_path']=="":
-                del data['file_path']
-            del data['action']
-            Project.objects.create(created_by=request.user,section=request.user.section,**data)
-            messages.success(request,"Your Project Created Successfully")
-            return redirect('/dashboard/coach/')
-        if data['action']=='save':
-            if data['file_path']=="":
-                del data['file_path']
-            del data['action']
-            Project.objects.filter(id=request.POST['id']).update(**data)
-            messages.success(request,"Your Project Updated Successfully")
-            return redirect('/dashboard/coach/')
+        Project.objects.create(created_by=request.user,**data)
+        messages.success(request,"Project Created Successfully")
+        # if data['action']=='createproject':
+        #     if data['file_path']=="":
+        #         del data['file_path']
+        #     del data['action']
+        #     Project.objects.create(created_by=request.user,section=request.user.section,**data)
+        #     return redirect('/dashboard/coach/')
+        # if data['action']=='save':
+        #     if data['file_path']=="":
+        #         del data['file_path']
+        #     del data['action']
+        #     Project.objects.filter(id=request.POST['id']).update(**data)
+        #     messages.success(request,"Your Project Updated Successfully")
+        #     return redirect('/dashboard/coach/')
             
-    return render(request,"coach_layouts/create_project.html")
+    return redirect(f"{request.META['HTTP_REFERER']}")
 
 
 
 
-def edit_project(request,project_id):
-    project=Project.objects.get(id=project_id)
-    project_data={}
-    for i in project._meta.fields:
-        project_data[i.name]=getattr(project,i.name)
-    project_data['deadline']=datetime.strftime(project_data['deadline'],'%Y-%m-%dT%H:%M')
-    return render(request,"coach_layouts/create_project.html",{"project":project_data})
+
+def update_project(request,project_id):
+    if request.method == 'POST':
+        data = {key:value for key,value in request.POST.items() if key != 'csrfmiddlewaretoken'}
+        Project.objects.filter(id=project_id).update(**data)
+        messages.success(request,"Project Updated Successfully")
+    return redirect('/')
+
+
+# def edit_project(request,project_id):
+#     project=Project.objects.get(id=project_id)
+#     project_data={}
+#     for i in project._meta.fields:
+#         project_data[i.name]=getattr(project,i.name)
+#     project_data['deadline']=datetime.strftime(project_data['deadline'],'%Y-%m-%dT%H:%M')
+#     return render(request,"coach_dashboard.html",{"project":project_data})
 
 
 
@@ -604,19 +614,19 @@ def delete_project(request,project_id):
 
 
 
-def edit_or_delete_project(request,project_id):
-    if request.GET['action']=='delete':
-        Project.objects.get(id=project_id).delete()
-        messages.success(request,"Your Project Deleted Successfully")
-    if request.GET['action']=='edit':
-        project=Project.objects.get(id=project_id)
-        fields=['id','title','description','deadline','document_link']
-        data={}
-        for field in fields:
-            data[field]=getattr(project,field)
-        data['deadline']=datetime.strftime(data['deadline'],'%Y-%m-%dT%H:%M')
-        return render(request,"coach_layouts/create_project.html",{'project':data})
-    return redirect('/')
+# def edit_or_delete_project(request,project_id):
+#     if request.GET['action']=='delete':
+#         Project.objects.get(id=project_id).delete()
+#         messages.success(request,"Your Project Deleted Successfully")
+#     if request.GET['action']=='edit':
+#         project=Project.objects.get(id=project_id)
+#         fields=['id','title','description','deadline','document_link']
+#         data={}
+#         for field in fields:
+#             data[field]=getattr(project,field)
+#         data['deadline']=datetime.strftime(data['deadline'],'%Y-%m-%dT%H:%M')
+#         return render(request,"coach_layouts/create_project.html",{'project':data})
+#     return redirect('/')
 
 
 

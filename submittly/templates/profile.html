@@ -81,11 +81,11 @@
                                         {% csrf_token %}
                                         <div class="form-field-div">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 4H7v16m0-8h8"/></svg>
-                                            <input type="text" class="firstname-field form-field" name="first_name" value="{{user.first_name|capfirst}}">
+                                            <input type="text" class="firstname-field form-field" name="first_name" value="{{user.first_name|capfirst}}" minlength="2" required>
                                         </div>
                                         <div class="form-field-div">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="-1 -1 27 27"><!-- Icon from Tabler Icons by Paweł Kuna - https://github.com/tabler/tabler-icons/blob/master/LICENSE --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16h10"/></svg>
-                                            <input type="text" class="lastname-field form-field" name="last_name" value="{{user.last_name|capfirst}}">
+                                            <input type="text" class="lastname-field form-field" name="last_name" value="{{user.last_name|capfirst}}" required>
                                         </div>
                                         <button type="submit" class="form-btn">Save</button>
                                     </form>
