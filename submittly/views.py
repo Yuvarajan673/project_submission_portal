@@ -529,7 +529,7 @@ def save_grade(request,sub_id):
     if request.method == "POST":
         Submission.objects.filter(id=sub_id).update(grade=request.POST['grade'],status="reviewed")
         messages.success(request,"Graded Successfully")
-    return redirect(f"{request.META["HTTP_REFERER"]}")
+    return redirect(f"{request.META['HTTP_REFERER']}")
 
 
 

@@ -1458,6 +1458,7 @@ input.late:checked + .for-late{
 .textarea-field{
     resize: vertical;
     max-height: 300px;
+    min-height: 100px;
 }
 .textarea-field-div > svg{
     align-self: flex-start;
