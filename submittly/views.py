@@ -559,7 +559,7 @@ def save_attendance(request,sec):
                 )
         messages.success(request,"Attendance Marked Successfully")
         
-    return redirect(f"{request.META["HTTP_REFERER"]}")
+    return redirect(f"{request.META['HTTP_REFERER']}")
 
 
 
