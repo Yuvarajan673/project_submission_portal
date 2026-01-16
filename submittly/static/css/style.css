@@ -154,19 +154,6 @@ p{
 
 
 
-/* ===== APP LAYOUT ===== */
-.app-layout {
-    display: flex;
-    height: 100vh;
-    overflow: auto;
-}
-
-main{
-    background-color: #F8FAFC;
-    margin-left: 72px;
-    height: 100%;
-    width: calc(100% - 72px);
-}
 
 
 

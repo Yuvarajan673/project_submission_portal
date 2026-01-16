@@ -8,10 +8,29 @@
     <link rel="shortcut icon" href="{% static 'icons/favicon.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>{% block title %}{% endblock title %}</title>
+
+    {% if user.is_authenticated %}
+    <style>
+        /* ===== APP LAYOUT ===== */
+        .app-layout {
+            display: flex;
+            height: 100vh;
+            overflow: auto;
+        }
+        main{
+            background-color: #F8FAFC;
+            margin-left: 72px;
+            height: 100%;
+            width: calc(100% - 72px);
+        }
+    </style>
+    {% endif %}
   </head>
   <body>
     <div class="app-layout">
-      {% include 'navbar.html' %}
+      {% if user.is_authenticated %}
+        {% include 'navbar.html' %}
+      {% endif %}
       <main class="main">
         {% block content %} {% endblock content %}
       </main>

@@ -3,6 +3,7 @@
     <nav class="navbar">
         <a href="/" class="site-title"><img src="{% static 'images/logo-icon.png' %}" height="30px"></a>
         <ul class="nav-links">
+            <!-- Sidebar's Top Potion -->
             <div class="top">
                 <hr style="width: 100%; border: 1px solid var(--grey);">
                 <li>
@@ -46,7 +47,8 @@
                     </a>
                 </li> -->
             </div>
-
+            
+            <!-- Sidebar's Bottom Potion -->
             <div class="bottom">
                 {% if user.is_authenticated %}
                 <li>
@@ -90,7 +92,7 @@
                     </a>
                 </li>
             {% endif %}
-        </div>
+            </div>
             <!--<li class="register-btn"><a href=""><span>Register</span></a></li>-->
         </ul>
     </nav>
