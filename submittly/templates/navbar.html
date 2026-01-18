@@ -35,6 +35,11 @@
                 </li>
                 {% elif request.user.role == 'admin' %}
                 <li>
+                    <a href="{% url 'user_management' %}" class="nav-link" data-label="User Management" style="--tooltip-color: var(--purple);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from coolicons by Kryston Schwarze - https://creativecommons.org/licenses/by/4.0/ --><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20c0-1.657-2.239-3-5-3s-5 1.343-5 3m14-3c0-1.23-1.234-2.287-3-2.75M3 17c0-1.23 1.234-2.287 3-2.75m12-4.014a3 3 0 1 0-4-4.472m-8 4.472a3 3 0 0 1 4-4.472M12 14a3 3 0 1 1 0-6a3 3 0 0 1 0 6"/></svg>
+                    </a>
+                </li>
+                <li>
                     <a href="{% url 'all_sections' %}" class="nav-link" data-label="Monthly Attendance Report" style="--tooltip-color: var(--purple);">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 14 14"><!-- Icon from Streamline by Streamline - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 6.5h1V11m-1 0h2"/><path d="M1.5 2.5a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-9a1 1 0 0 0-1-1h-2m-7-2v4m7-4v4m-7-2h5"/><path d="M3.5 6.5H6l-1.5 2s1.5 0 1.5 1A1.33 1.33 0 0 1 4.5 11h-1"/></g></svg>
                     </a>
@@ -47,7 +52,7 @@
                     </a>
                 </li> -->
             </div>
-            
+
             <!-- Sidebar's Bottom Potion -->
             <div class="bottom">
                 {% if user.is_authenticated %}

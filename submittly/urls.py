@@ -65,6 +65,11 @@ urlpatterns=[
 
     # Admin Dashboard Routes
     path('dashboard/admin/',views.admin_dashboard,name='admin_dashboard'),
+    path('dashboard/admin/add/user',views.add_user_csv,name='add_user_csv'),
+    path('reset/progress/cache/',views.reset_progress_cache,name='reset_progress_cache'),
+    path('csv/progress/',views.csv_progress,name='csv_progress'),
+    path('terminate/progress/',views.terminate_progress,name='terminate_progress'),
+    path('dashboard/admin/user/management/',views.user_management,name='user_management'),
     path('dashboard/admin/all/sections/',views.all_sections,name='all_sections'),
     path('table_filter/<str:mod_name>/',views.table_filter,name='table_filter'),
     path('add_user/<str:mod_name>/',views.add_user,name='add_user'),

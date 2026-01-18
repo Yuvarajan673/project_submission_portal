@@ -1,3 +1,40 @@
+// Chart.js Library for data visualization
+const projectStatusChart = document.getElementById('project-status-chart')
+
+if(projectStatusChart){
+new Chart(projectStatusChart,{
+        type:'bar',
+        data:{
+            labels:["Sec A","Sec B","Sec C"],
+            datasets:[
+                {
+                    data:[60,22,18],
+                    backgroundColor:['#4c00fe','#ff8400','#ff0037']
+                }
+            ]
+        },
+        options:{
+            plugins:{
+                legend:{display:false},
+                title:{
+                    display:true,
+                    text:"Whole Year Attendance %",
+                    font:{size:20},
+                    align:'start'
+                }
+            }
+        }
+    })
+    
+}
+
+
+
+
+
+
+
+
 function change_icon(field_id,ico_id){
     var icon = document.getElementById(ico_id)
     var p_input = document.getElementById(field_id)
@@ -181,4 +218,71 @@ if(imagePlaceholder,imgInput,profileText){
         }
     })
 }
+
+
+
+
+
+
+// CSV Uploading Progress
+const form = document.getElementById('csv-upload-form');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]');
+
+
+if(form && csrftoken){
+    form.addEventListener("submit",(e)=>{
+        e.preventDefault();
+        
+        fetch('/reset/progress/cache/',{
+            method: 'POST',
+            headers:{
+                'X-CSRFToken': csrftoken.value
+            }
+        })
+        .then(()=>{
+            const progressBar = document.getElementById('progress-bar-div')
+            const modalTitle = document.getElementById('upload-csv-modal-title')
+            const terminateBtn = document.getElementById('csv-close-btn')
+            
+            checkProgress();
+            form.submit();
+            form.style.display='none'
+            progressBar.style.display='flex'
+            modalTitle.textContent = "Importing Users..."
+
+            terminateBtn.addEventListener('click',()=>{
+                fetch('/terminate/progress/')
+                .then(res => res.json())
+                .then(data => console.log(data))
+                .catch(error => console.error(error))
+            })
+    
+        })
+        .catch(err => console.error(err))
+    })
+}
+
+
+function checkProgress(){
+    fetch('/csv/progress/')
+    .then(res => res.json())
+    .then(data => {
+        const progress = document.getElementById('progress')
+        const progressValue = document.getElementById('progress-value')
+
+        progress.style.width = `${data.progress}%`
+        progressValue.textContent = `${data.progress}%`
+        console.log(data)
+        
+        if(data.progress < 100){
+            setTimeout(checkProgress,1000)
+        }
+    })
+    
+}
+
+
+
+
+
 

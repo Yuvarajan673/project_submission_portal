@@ -21,7 +21,7 @@
                 <h2 class="modal-title">Create Project</h2>
             </div>
             <div class="modal-body">
-                <form class="profile-firstname-lastname-form" action="{% if project %} {% url 'update_project' project.id %} {% else %} {% url 'create_project' %} {% endif %}" method="post">
+                <form class="modal-form" action="{% if project %} {% url 'update_project' project.id %} {% else %} {% url 'create_project' %} {% endif %}" method="post">
                     {% csrf_token %}
                     <div class="text-field-div form-field-div">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="4 0 24 24"><!-- Icon from Google Material Icons by Material Design Authors - https://github.com/material-icons/material-icons/blob/master/LICENSE --><path fill="currentColor" d="M5 5.5C5 6.33 5.67 7 6.5 7h4v10.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V7h4c.83 0 1.5-.67 1.5-1.5S18.33 4 17.5 4h-11C5.67 4 5 4.67 5 5.5"/></svg>

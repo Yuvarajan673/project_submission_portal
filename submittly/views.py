@@ -1,7 +1,10 @@
+import csv
 from datetime import date, datetime
 import calendar
 import math
 import time, random
+from django.core.cache import cache
+from django.http import JsonResponse
 from django.shortcuts import *
 from .models import *
 from django.core.mail import send_mail
@@ -281,7 +284,7 @@ def update_first_and_last_name(request):
 """ 
 ===============================================
 Student Dashboard
-=============================================== 
+===============================================  
 """
 
 @login_required(login_url='/error/403/')
@@ -581,7 +584,7 @@ def create_project(request):
         #     Project.objects.filter(id=request.POST['id']).update(**data)
         #     messages.success(request,"Your Project Updated Successfully")
         #     return redirect('/dashboard/coach/')
-            
+
     return redirect(f"{request.META['HTTP_REFERER']}")
 
 
@@ -635,19 +638,113 @@ def admin_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
 
-    app_config=apps.get_app_config('submittly')
-    app_models=app_config.get_models()
+    # app_config=apps.get_app_config('submittly')
+    # app_models=app_config.get_models()
 
-    model_list=[]
+    # model_list=[]
 
-    for model in app_models:
-        model_list.append({
-            'name':model.__name__,
-            'count':model.objects.count()
-        })
+    # for model in app_models:
+    #     model_list.append({
+    #         'name':model.__name__,
+    #         'count':model.objects.count()
+    #     })
 
-    return render(request,'admin_dashboard.html',{'models':model_list})
+    # Over Attendance for current month
+    sec_a_tot_att=Attendance.objects.filter(
+        date__year=(date.today().year)-1,student__section='A').count()
+    sec_b_tot_att=Attendance.objects.filter(
+        date__year=(date.today().year)-1,student__section='B').count()
+    sec_c_tot_att=Attendance.objects.filter(
+        date__year=(date.today().year)-1,student__section='C').count()
+    
+    print(sec_a_tot_att,sec_b_tot_att,sec_c_tot_att)
+    
+    
 
+
+    return render(request,'admin_dashboard.html')
+
+
+
+def add_user_csv(request):
+    if request.method == 'POST':
+        # Getting the File from Request
+        csv_file = request.FILES['csv_file']
+        total_rows = sum(1 for _ in csv_file)-1
+        csv_file.seek(0)
+
+        # Decoding the bytes into string
+        decoded_str = csv_file.read().decode('utf-8')
+        # Readind the file
+        readfile = csv.DictReader(decoded_str.splitlines())
+
+
+        # Deleting exist Cache
+        cache.delete(f"terminate_progress_{request.user.id}")
+
+
+        # Initializing the Cache
+        cache_key = f"csv_progress_{request.user.id}"
+        cache.set(cache_key,0)
+
+        # Deleting the terminate progress cache which was stored before
+        try_count=0
+        exep_count=0
+        for userdata in readfile:
+            if cache.get(f"terminate_progress_{request.user.id}"):
+                return redirect("user_management")
+            try:
+                User.objects.create_user(
+                    first_name=userdata.get('firstname').lower(),
+                    last_name=userdata.get('lastname').lower(),
+                    email=userdata.get('email'),
+                    username=userdata.get('username'),
+                    password=userdata.get('password'),
+                    role=userdata.get('role'),
+                    section=userdata.get('section')
+                )
+                try_count+=1 
+            except Exception as e:
+                exep_count+=1
+                print(f"Error During Runtime {e}")
+                continue
+            finally:
+                progress = math.floor(((try_count+exep_count)/total_rows)*100)
+                cache.set(cache_key,progress)
+        time.sleep(3)
+        messages.success(request,f"{try_count} Records Inserted Successfully. {exep_count} Records Failed.")
+        return redirect("user_management")
+        
+
+def reset_progress_cache(request):   
+    cache_key = f"csv_progress_{request.user.id}"
+    cache.set(cache_key,0)
+    return JsonResponse({"reset":"ok"})
+
+
+def csv_progress(request):
+    cache_key = f"csv_progress_{request.user.id}"
+    progress = cache.get(cache_key,0)
+    return JsonResponse({'progress':progress})
+
+
+def terminate_progress(request):
+    cache_key = f"terminate_progress_{request.user.id}"
+    cache.set(cache_key,True,120)
+    return JsonResponse({'terminated':'ok'})
+
+
+
+
+
+def user_management(request):
+    users_data={
+        "total_users":User.objects.all().count(),
+        "students":User.objects.filter(role="student").count(),
+        "coaches":User.objects.filter(role="coach").count(),
+        "admins":User.objects.filter(role="admin").count(),
+    }
+    return render(request,'admin_layouts/user_management.html',{"users_data":users_data})
 
 
 def all_sections(request):
