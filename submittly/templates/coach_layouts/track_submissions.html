@@ -1,0 +1,64 @@
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
+{% block title %}Track Submissions | Submittly{% endblock title %}
+{% block content %}
+
+<section class="dashboard">
+    <div>
+        <h2>Track Submissions</h2>
+        <form class="action-bar">
+            <div class="year-month-select-group-div">
+                <label for="select-year" class="select-year-label" id="filter-by">Select Year
+                    <select name="filter-by" onchange="this.form.submit()" id="select-filter" class="select-year select" required>
+                        <option value="weekly" {% if filter_type == "weekly" %} selected {% endif %}>Weekly</option>
+                        <option value="monthly" {% if filter_type == "monthly" %} selected {% endif %}>Monthly</option>
+                        <option value="yearly" {% if filter_type == "yearly" %} selected {% endif %}>Yearly</option>
+                    </select>
+                </label>
+                <label for="select-year" class="select-year-label" id="year-selection-dropdown">Year
+                    <select name="year" onchange="this.form.submit()" id="select-year" class="select-year select" required>
+                        {% for yr in years %}
+                        <option value="{{yr}}" {% if yr == year %} selected {% endif %} >{{yr}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="select-month" class="select-month-label" id="month-selection-dropdown">Month
+                    <select name="month" onchange="this.form.submit()" id="select-month" class="select-month select" required>
+                        {% for mnth in months %}
+                        <option value="{{mnth}}" {% if mnth == month %} selected {% endif %} >{{months|get_items:mnth}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <label for="select-student" class="select-student-label" id="week-selection-dropdown">Week
+                    <select name="week" onchange="this.form.submit()" id="select-week" class="select-week select" required>
+                        {% for wk in weeks %}
+                        <option value="{{wk}}" {% if wk == week %} selected {% endif %} >Week {{wk}}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+        </form>
+    </div>
+    <table>
+        <thead>
+            <th>Student Name</th>
+            <th>Total Projects</th>
+            <th>Submitted</th>
+            <th>Missed</th>
+            <th>Submission Rate</th>
+        </thead>
+        <tbody>
+            {% for student in submission_data %}
+            <tr>
+                <td>{{ student|capfirst }}</td>
+                <td>{{ submission_data|get_items:student|get_items:"total_projects" }}</td>
+                <td>{{ submission_data|get_items:student|get_items:"submitted" }}</td>
+                <td>{{ submission_data|get_items:student|get_items:"missed" }}</td>
+                <td>{{ submission_data|get_items:student|get_items:"submission_rate" }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
+
+{% endblock content %}

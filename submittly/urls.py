@@ -42,6 +42,8 @@ urlpatterns=[
 
     # Coach Dashboard Routes
     path('dashboard/coach/',views.coach_dashboard,name='coach_dashboard'),
+    path('dashboard/coach/your/projects',views.your_projects,name='your_projects'),
+    path('dashboard/coach/track/submissions',views.track_submissions,name='track_submissions'),
     path('dashboard/coach/attendance/',views.attendance,name='attendance'),
     path('dashboard/coach/attendance/report',views.attendance_report,name='attendance_report'),
     path('create/project/',views.create_project,name='create_project'),

@@ -2,30 +2,17 @@
 const projectStatusChart = document.getElementById('project-status-chart')
 
 if(projectStatusChart){
-new Chart(projectStatusChart,{
-        type:'bar',
+
+    new Chart(projectStatusChart,{
+        type:"pie",
         data:{
-            labels:["Sec A","Sec B","Sec C"],
-            datasets:[
-                {
-                    data:[60,22,18],
-                    backgroundColor:['#4c00fe','#ff8400','#ff0037']
-                }
-            ]
+            labels:["Missed","Total Projects","Submitted"],
+            datasets:[{
+                data:[17,89,21],
+        }]
         },
-        options:{
-            plugins:{
-                legend:{display:false},
-                title:{
-                    display:true,
-                    text:"Whole Year Attendance %",
-                    font:{size:20},
-                    align:'start'
-                }
-            }
-        }
+        
     })
-    
 }
 
 
@@ -286,3 +273,61 @@ function checkProgress(){
 
 
 
+// Submission Tracking Dropdown
+const filterBy = document.getElementById("select-filter")
+
+if(filterBy){
+    const monthSelection = document.getElementById("month-selection-dropdown")
+    const weekSelection = document.getElementById("week-selection-dropdown")
+    const weekSelect = document.getElementById("select-week")
+    const monthSelect = document.getElementById("select-month")
+
+    window.addEventListener("load",()=>{
+        if(filterBy.value == "weekly"){
+            weekSelection.style.display='flex'
+            monthSelection.style.display='flex'
+        }
+        else if(filterBy.value == "monthly"){
+            weekSelect.disabled = true
+            weekSelection.style.display='none'
+            monthSelection.style.display='flex'
+        }
+        else if(filterBy.value == "yearly"){
+            weekSelect.disabled = true
+            weekSelection.style.display='none'
+            monthSelect.disabled = true
+            monthSelection.style.display='none'
+        }
+    })
+}
+
+
+// Load the weeks for Track Submissions
+
+// const yearSelect = document.getElementById("select-year")
+// const monthSelect = document.getElementById("select-month")
+// const weekSelect = document.getElementById("select-week")
+
+// if(yearSelect && monthSelect){
+//     document.addEventListener("DOMContentLoaded",()=>{
+
+//         const year = parseInt(yearSelect.value)
+//         const month = parseInt(monthSelect.value) - 1
+
+//     weekSelect.innerHTML=""
+
+//     const daysInMonth = new Date(year,month+1,0).getDate() // Get the Total days from the month
+//     const firstday = new Date(year,month,1).getDay() // Get the Day that the date 1 appears in first
+    
+//     const weeks = Math.ceil((firstday + daysInMonth)/7)
+    
+//     for(let i=1; i<=weeks; i++){
+//         const option = document.createElement('option')
+//         option.value = i
+//         option.textContent = `Week ${i}`
+
+//         weekSelect.appendChild(option)
+//     }
+// })
+
+// }

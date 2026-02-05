@@ -1,5 +1,5 @@
 import csv
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 import calendar
 import math
 import time, random
@@ -88,7 +88,7 @@ def generate_calendar(year,month):
         'month':calendar.month_name[month], # Gives month name to check in the select tag
         'year':year,
     }
-    return calendar_attrs
+    return calendar_attrs 
 
 
 
@@ -462,13 +462,121 @@ def coach_dashboard(request):
 
 
 
+def your_projects(request):
+    projects = Project.objects.filter(created_by=request.user)
+
+    # Edit Project
+    project_id=request.GET.get('project-id', None)
+    project=None
+    if project_id:
+        project=Project.objects.get(id=project_id)
+        project.deadline=datetime.strftime(project.deadline,'%Y-%m-%dT%H:%M')
+    
+    sub_count={}
+    for pro in projects:
+        sub_count[pro.id]=Submission.objects.filter(submitted_to=pro).count()
+    tot_student=User.objects.filter(section=request.user.section,role='student').count()
+    return render(request,"coach_layouts/your_projects.html",{"projects":projects,'project':project,"sub_count":sub_count,"tot_student":tot_student})
+
+
+
+def track_submissions(request):
+    filter_type = request.GET.get("filter-by")
+    year = int(request.GET.get("year", date.today().year))
+    month = int(request.GET.get("month", date.today().month))
+    week = int(request.GET.get("week", "1"))
+
+    # Filter Monthly
+    submission_data = {}
+
+    students = User.objects.filter(role='student',section=request.user.section).order_by("first_name")
+    if filter_type == "monthly":
+        monthly_projects = Project.objects.filter(created_by=request.user, created_at__year=year, created_at__month=month)
+        total_projects = monthly_projects.count()
+
+        for student in students:
+            submissions = Submission.objects.filter(submitted_by=student, submitted_to__in=monthly_projects)
+            submission_count = submissions.count()
+            missed_count = max(total_projects - submission_count, 0)
+            submission_rate = (round((submission_count / total_projects)*100, 2) if total_projects > 0 else 0)
+
+
+            submission_data[student.first_name]={
+                "total_projects": total_projects,
+                "submitted": submission_count,
+                "missed": missed_count,
+                "submission_rate": submission_rate
+            }
+    # Filter Yearly
+    elif filter_type == "yearly":
+        yearly_projects = Project.objects.filter(created_by=request.user, created_at__year=year)
+        total_projects = yearly_projects.count()
+
+        for student in students:
+            submissions = Submission.objects.filter(submitted_by=student, submitted_to__in=yearly_projects)
+            submission_count = submissions.count()
+            missed_count = max(total_projects - submission_count, 0)
+            submission_rate = (round((submission_count / total_projects)*100, 2) if total_projects > 0 else 0)
+
+            submission_data[student.first_name]={
+                "total_projects": total_projects,
+                "submitted": submission_count,
+                "missed": missed_count,
+                "submission_rate": submission_rate
+            }
+
+    # Filter Weekly
+    else:
+        first_date = date(year,month,1)
+        week_day = first_date.weekday()
+        week_start = first_date - timedelta(days=week_day) + timedelta(weeks=week - 1)
+        week_end = week_start + timedelta(days=6)
+
+        weekly_projects = Project.objects.filter(created_by=request.user, created_at__date__gte = week_start, created_at__date__lte = week_end)
+        total_projects = weekly_projects.count()
+
+        for student in students:
+            submissions = Submission.objects.filter(submitted_by=student, submitted_to__in = weekly_projects)
+            submission_count = submissions.count()
+            missed_count = max(total_projects - submission_count, 0)
+            submission_rate = (round((submission_count / total_projects)*100, 2) if total_projects > 0 else 0)
+            
+            submission_data[student.first_name]={
+                "total_projects": total_projects,
+                "submitted": submission_count,
+                "missed": missed_count,
+                "submission_rate": submission_rate
+            }
+
+
+
+    years = [year for year in range(2024,date.today().year+1)]
+    months = {
+    1: "January", 2: "February", 3: "March", 4: "April",
+    5: "May", 6: "June", 7: "July", 8: "August",
+    9: "September", 10: "October", 11: "November", 12: "December"
+    } 
+    # Calculate the week
+    first_day, days_in_month = calendar.monthrange(year,month)
+    total_weeks = math.ceil((first_day + days_in_month) / 7)
+    weeks = list(range(1, total_weeks+1))
+    return render(request,"coach_layouts/track_submissions.html",{
+        "filter_type":filter_type,
+        "years":years,
+        "months":months,
+        "weeks":weeks,
+        "year":year,
+        "month":month,
+        "week":week,
+        "submission_data":submission_data})
+
+
 
 def attendance(request):
     students = User.objects.filter(section=request.user.section,role='student').order_by('first_name')
     today_att = {rcd.student.id:rcd.status for rcd in Attendance.objects.filter(student__section=request.user.section,date=timezone.now())}
     if today_att == {}:
         today_att=False
-    print(today_att)
     return render(request,"coach_layouts/attendance.html",{'students':students,'sec':request.user.section,'today_att':today_att})
 
 
@@ -497,7 +605,7 @@ def attendance_report(request):
         'attendance':attendance
     }
     # Hardcoded data of month and year
-    years = [2023,2024,2025,2026]
+    years = [year for year in range(2024,date.today().year+1)]
     months = {
     1: "January", 2: "February", 3: "March", 4: "April",
     5: "May", 6: "June", 7: "July", 8: "August",
@@ -596,7 +704,7 @@ def update_project(request,project_id):
         data = {key:value for key,value in request.POST.items() if key != 'csrfmiddlewaretoken'}
         Project.objects.filter(id=project_id).update(**data)
         messages.success(request,"Project Updated Successfully")
-    return redirect('/')
+    return redirect("/dashboard/coach/your/projects")
 
 
 # def edit_project(request,project_id):
