@@ -1551,6 +1551,18 @@ option:checked{
 }
 
 
+.credentials{
+    font-size: small;
+}
+.credentials > span{
+    font-weight: bold;
+}
+.credentials-div{
+    display: flex;
+    gap: 10px;
+}
+
+
 
 
 /* =========================================================

@@ -13,7 +13,6 @@ from django.contrib.auth.decorators import *
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 
-
 # Create your views here.
 
 
@@ -29,36 +28,6 @@ def check_redirection(request):
         return redirect('/dashboard/student/')
     return None
 
-
-
-def order_fields(flds,custom_fields=[
-        ['first_name','last_name','username','section','email','role','date_joined','last_login'],
-        ['title','description','deadline','created_by','created_at'],
-        ['submitted_by','submitted_to','submitted_at']
-        ]):
-    
-    ordered_fields=[]
-    for i in range(len(custom_fields)):
-        for j in range(len(custom_fields[i])):
-            if custom_fields[i][j] in flds:
-                ordered_fields.append(custom_fields[i][j])
-        
-    return ordered_fields
-
-
-def get_own_fields(fields,custom_fields):
-    cus_fld=[]
-    for i in custom_fields:
-        if i in fields:
-            cus_fld.append(i)
-    return cus_fld
-
-
-def get_fields(model):
-    fields=[]
-    for f in model._meta.fields:
-        fields.append(f.name)
-    return fields
 
 
 # Generate OTP and sends it to given email.
@@ -143,51 +112,6 @@ def logout_user(request):
         messages.success(request, "Logged out Successfully")
     return redirect('/')
 
-
-
-
-
-
-def send_otp(request):
-    if request.user.is_authenticated:
-        return redirect('/')
-    if request.method=='POST':
-        email=request.POST.get('email').strip()
-        send_otp_to_email(request,email)
-        messages.success(request, "Verification Code Sent To your Email")
-        return redirect('/verify/')
-
-    return render(request,"send_otp.html")
-
-
-
-def verify(request):
-    if request.user.is_authenticated:
-        return redirect('/')
-    if request.method=='POST':
-        verify_otp=request.POST.get('verify-code').strip()
-        saved_otp = request.session.get('otp')
-        created_time=request.session.get('otp_created_time')
-
-        context={
-            'otp':verify_otp
-        }
-
-        if created_time and time.time()-created_time > 300:
-            del request.session['otp']
-            del request.session['otp_created_time']
-            return messages.error(request,"* OTP expired")
-            
-        elif str(verify_otp) == str(saved_otp):
-            del request.session['otp']
-            del request.session['otp_created_time']
-            return redirect('/register/')
-        
-        else:
-            messages.error(request,"* Enter Valid OTP")
-            return render(request,'verify.html',context)
-        
-    return render(request,'verify.html')
 
 
 
@@ -429,7 +353,7 @@ def del_mysub(request,p_id):
 """ 
 ===============================================
 Coach Dashboard
-=============================================== 
+===============================================
 """
 
 @login_required(login_url='/error/403/')
@@ -679,20 +603,6 @@ def create_project(request):
         data={key:val for key,val in request.POST.items() if key != 'csrfmiddlewaretoken'}
         Project.objects.create(created_by=request.user,**data)
         messages.success(request,"Project Created Successfully")
-        # if data['action']=='createproject':
-        #     if data['file_path']=="":
-        #         del data['file_path']
-        #     del data['action']
-        #     Project.objects.create(created_by=request.user,section=request.user.section,**data)
-        #     return redirect('/dashboard/coach/')
-        # if data['action']=='save':
-        #     if data['file_path']=="":
-        #         del data['file_path']
-        #     del data['action']
-        #     Project.objects.filter(id=request.POST['id']).update(**data)
-        #     messages.success(request,"Your Project Updated Successfully")
-        #     return redirect('/dashboard/coach/')
-
     return redirect(f"{request.META['HTTP_REFERER']}")
 
 
@@ -707,16 +617,6 @@ def update_project(request,project_id):
     return redirect("/dashboard/coach/your/projects")
 
 
-# def edit_project(request,project_id):
-#     project=Project.objects.get(id=project_id)
-#     project_data={}
-#     for i in project._meta.fields:
-#         project_data[i.name]=getattr(project,i.name)
-#     project_data['deadline']=datetime.strftime(project_data['deadline'],'%Y-%m-%dT%H:%M')
-#     return render(request,"coach_dashboard.html",{"project":project_data})
-
-
-
 def delete_project(request,project_id):
     Project.objects.get(id=project_id).delete()
     messages.success(request,"Your Project Deleted Successfully")
@@ -724,52 +624,10 @@ def delete_project(request,project_id):
     
 
 
-
-# def edit_or_delete_project(request,project_id):
-#     if request.GET['action']=='delete':
-#         Project.objects.get(id=project_id).delete()
-#         messages.success(request,"Your Project Deleted Successfully")
-#     if request.GET['action']=='edit':
-#         project=Project.objects.get(id=project_id)
-#         fields=['id','title','description','deadline','document_link']
-#         data={}
-#         for field in fields:
-#             data[field]=getattr(project,field)
-#         data['deadline']=datetime.strftime(data['deadline'],'%Y-%m-%dT%H:%M')
-#         return render(request,"coach_layouts/create_project.html",{'project':data})
-#     return redirect('/')
-
-
-
 @login_required(login_url='/login/')
 def admin_dashboard(request):
     if check_redirection(request):
         return check_redirection(request)
-
-    # app_config=apps.get_app_config('submittly')
-    # app_models=app_config.get_models()
-
-    # model_list=[]
-
-    # for model in app_models:
-    #     model_list.append({
-    #         'name':model.__name__,
-    #         'count':model.objects.count()
-    #     })
-
-    # Over Attendance for current month
-    sec_a_tot_att=Attendance.objects.filter(
-        date__year=(date.today().year)-1,student__section='A').count()
-    sec_b_tot_att=Attendance.objects.filter(
-        date__year=(date.today().year)-1,student__section='B').count()
-    sec_c_tot_att=Attendance.objects.filter(
-        date__year=(date.today().year)-1,student__section='C').count()
-    
-    print(sec_a_tot_att,sec_b_tot_att,sec_c_tot_att)
-    
-    
-
-
     return render(request,'admin_dashboard.html')
 
 
@@ -783,7 +641,7 @@ def add_user_csv(request):
 
         # Decoding the bytes into string
         decoded_str = csv_file.read().decode('utf-8')
-        # Readind the file
+        # Reading the file
         readfile = csv.DictReader(decoded_str.splitlines())
 
 
@@ -875,96 +733,6 @@ def get_sec_students(request,sec):
     if today_att == {}: 
         today_att=False
     return render(request,"admin_layouts/section.html",{"students":students,"sec":sec,"today_att":today_att})
-
-
-
-def table_filter(request,mod_name):
-    role = request.GET.get('filter-role')
-    model=apps.get_model('submittly',mod_name)
-    fields=order_fields(get_fields(model))
-    users=model.objects.all()
-    if role:
-        users=model.objects.filter(role=role)
-    return render(request,'admin_dashboard.html',{'users':users,'fields':fields,'role':role,'mod_name':mod_name,'show_table':True})
-
-
-
- 
-@login_required(login_url='/login/')
-def model_details(request,mod_name):
-    model=apps.get_model('submittly',mod_name) 
-    fields=get_fields(model)
-    fields=order_fields(fields)
-    users=model.objects.all()
-    return render(request,'admin_dashboard.html',{'users':users,'fields':fields,'mod_name':mod_name,'show_table':True})
-
-
-
-@login_required(login_url='/login/')
-def change_user(request,id,mod_name):
-    model=apps.get_model('submittly',mod_name)
-    user=model.objects.get(id=id)
-    getfields=get_fields(model)
-    custom_fields=['first_name','last_name','username','email','role','date_joined','last_login','is_superuser','is_staff','is_active']
-    fields=get_own_fields(getfields,custom_fields=custom_fields)
-    data={'id':id,
-          'mod_name':mod_name, 
-          'show_template':False}
-    for f in fields:
-        data[f]=getattr(user,f)
-    data['date_joined']=datetime.strftime(data['date_joined'],'%Y-%m-%dT%H:%M')
-    if data['last_login']:
-        data['last_login']=datetime.strftime(data['last_login'],'%Y-%m-%dT%H:%M')
-    else:
-        data['last_login']=None
-    if user:
-        data['show_template']=True
-    return render(request,'admin_dashboard.html',{'data':data})
-
-
-
-
-
-@login_required(login_url='/error/403/')
-def add_user(request,mod_name):
-    btn_value=request.GET.get('mode')
-    data={'id':request.user.id,
-          'show':False,
-          'mod_name':mod_name}
-    if btn_value=='adduser':
-        data['show']=True 
-    return render(request,'admin_dashboard.html',{'data':data})
-
-
-
-
-
-@login_required(login_url='/error/403/')
-def adminform(request,id,mod_name):
-    if request.method=='POST':
-        model=apps.get_model('submittly',mod_name)
-        data = {key:value for key,value in request.POST.items() if key != 'csrfmiddlewaretoken'}
-
-        data['date_joined']=datetime.strptime(data['date_joined'],'%Y-%m-%dT%H:%M')
-        if data['last_login']:
-            data['last_login']=datetime.strptime(data['last_login'],'%Y-%m-%dT%H:%M')
-        if data['last_login']=='':
-            data['last_login']=None
-        
-        if data['action'] =='change':
-            data.pop('action')
-            model.objects.filter(id=id).update(**data)
-            messages.success(request,"Changed Successfully")
-        elif data['action']=='add':
-            data.pop('action')
-            model.objects.create_user(**data)
-            messages.success(request,"Added Successfully")
-        elif data['action']=='delete':
-            model.objects.get(id=id).delete()
-            messages.success(request,"Deleted Successfully")
-        return redirect(f'/model_details/{mod_name}')
-
-    return render(request,'admin_dashboard.html')
 
 
 

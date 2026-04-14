@@ -9,8 +9,6 @@ urlpatterns=[
     # Auth Routes
     path('login/',views.login_user,name='login_user'),
     path('logout/',views.logout_user,name='logout_user'),
-    path('send/otp',views.send_otp,name='send_otp'),
-    path('verify/',views.verify,name='verify'),
     path('register/',views.register,name='register'),
 
     
@@ -73,9 +71,4 @@ urlpatterns=[
     path('terminate/progress/',views.terminate_progress,name='terminate_progress'),
     path('dashboard/admin/user/management/',views.user_management,name='user_management'),
     path('dashboard/admin/all/sections/',views.all_sections,name='all_sections'),
-    path('table_filter/<str:mod_name>/',views.table_filter,name='table_filter'),
-    path('add_user/<str:mod_name>/',views.add_user,name='add_user'),
-    path('adminform/<int:id>/<str:mod_name>/',views.adminform,name='adminform'),
-    path('model_details/<str:mod_name>/',views.model_details,name='model_details'),
-    path('change_user/<int:id>/<str:mod_name>/',views.change_user,name='change_user'),
 ]
